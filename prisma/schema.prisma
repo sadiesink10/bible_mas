@@ -1,0 +1,52 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id             String          @id @default(uuid())
+  name           String
+  email          String          @unique
+  passwordHash   String
+  profileColor   String          @default("#3B82F6")
+  jesusPoints    Int             @default(0)
+  currentStreak  Int             @default(0)
+  longestStreak  Int             @default(0)
+  lastActiveDate DateTime?
+  createdAt      DateTime        @default(now())
+  
+  readings       ReadingEntry[]
+  activities     ActivityFeed[]
+  streaks        StreakHistory[]
+}
+
+model ReadingEntry {
+  id         String   @id @default(uuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  testament  String
+  book       String
+  chapter    Int
+  startVerse Int?
+  endVerse   Int?
+  date       DateTime @default(now())
+}
+
+model ActivityFeed {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      String   
+  message   String
+  createdAt DateTime @default(now())
+}
+
+model StreakHistory {
+  id     String   @id @default(uuid())
+  userId String
+  user   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  date   DateTime @default(now())
+}
