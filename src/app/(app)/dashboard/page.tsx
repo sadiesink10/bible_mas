@@ -73,7 +73,7 @@ export default async function DashboardPage() {
               No recent activity. Be the first to read today!
             </p>
           )}
-          {feed.map((item) => (
+          {feed.map((item: any) => (
             <div key={item.id} className="bg-white dark:bg-gray-900 p-5 rounded-3xl border border-gray-200 dark:border-gray-800 shadow-sm flex items-start gap-4 hover:shadow-md transition-shadow">
               <div 
                 className="w-12 h-12 rounded-2xl flex-shrink-0 flex items-center justify-center text-white font-bold text-lg shadow-sm"
