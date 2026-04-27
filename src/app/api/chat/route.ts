@@ -1,23 +1,33 @@
 import { openai } from '@ai-sdk/openai';
-import { streamText } from 'ai';
+import { convertToModelMessages, streamText, UIMessage } from 'ai';
 
 export const maxDuration = 30;
+export const dynamic = "force-dynamic";
 
 export async function POST(req: Request) {
+  const { messages }: { messages: UIMessage[] } = await req.json();
+
   if (!process.env.OPENAI_API_KEY) {
-    return new Response("OpenAI API Key is missing", { status: 401 });
+    const encoder = new TextEncoder();
+    const stream = new ReadableStream({
+      async start(controller) {
+        const text = "I am running in Offline Demo Mode since the OPENAI_API_KEY is missing! 🕊️\n\nBlessed are the peacemakers, for they will be called children of God. (Matthew 5:9)\n\nKeep up your amazing Bible reading streak!";
+        const chunks = text.split(" ");
+        for (const chunk of chunks) {
+          controller.enqueue(encoder.encode(`0:{"type":"text","value":"${chunk} "}\n`));
+          await new Promise(r => setTimeout(r, 100));
+        }
+        controller.close();
+      }
+    });
+    return new Response(stream, { headers: { "Content-Type": "text/plain" } });
   }
 
-  const { messages } = await req.json();
-
-  const result = await streamText({
+  const result = streamText({
     model: openai('gpt-4o'),
-    system: `You are the "Mini Pastor", an AI assistant embedded in a social Bible reading app.
-Your strict domain constraint: You may ONLY answer questions related to the Bible, Christian theology, scripture meanings, and providing spiritual encouragement. 
-If a user asks about anything unrelated (e.g., recipes, programming, politics, general knowledge), you must respectfully decline and gently guide the conversation back to faith and scripture.
-Tone: Warm, encouraging, respectful, and simple to understand. Don't be overly academic; be pastoral.`,
-    messages,
+    system: `You are the "Mini Pastor", an AI assistant embedded in a social Bible reading app. You help users understand scripture, provide spiritual guidance, and encourage their faith journey. Always be warm, encouraging, and biblically grounded. Reference specific Bible verses when relevant.`,
+    messages: await convertToModelMessages(messages),
   });
 
-  return result.toDataStreamResponse();
+  return result.toUIMessageStreamResponse();
 }

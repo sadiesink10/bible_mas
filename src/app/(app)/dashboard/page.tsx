@@ -3,6 +3,8 @@ import { db } from "@/lib/db";
 import { Flame, Trophy, Award, Activity } from "lucide-react";
 import { formatDistanceToNow } from "date-fns/formatDistanceToNow";
 
+export const dynamic = "force-dynamic";
+
 export default async function DashboardPage() {
   const session = await auth();
   const userId = session?.user?.id;

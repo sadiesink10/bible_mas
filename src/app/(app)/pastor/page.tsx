@@ -1,12 +1,20 @@
 "use client";
 
-import { useChat } from "ai/react";
+import { useChat } from "@ai-sdk/react";
+import { DefaultChatTransport } from "ai";
 import { Send, User as UserIcon, Sparkles } from "lucide-react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function PastorPage() {
-  const { messages, input, handleInputChange, handleSubmit, isLoading, error } = useChat();
+  const { messages, sendMessage, status, error } = useChat({
+    transport: new DefaultChatTransport({
+      api: "/api/chat",
+    }),
+  });
+  const [input, setInput] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const isLoading = status === "submitted" || status === "streaming";
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -34,14 +42,14 @@ export default function PastorPage() {
             </div>
             <h3 className="text-xl font-semibold mb-2">How can I help you today?</h3>
             <p className="text-sm text-gray-600 dark:text-gray-400">
-              Try asking "What does John 3:16 mean?" or "How can I find peace during hard times?"
+              Try asking &quot;What does John 3:16 mean?&quot; or &quot;How can I find peace during hard times?&quot;
             </p>
           </div>
         )}
         
         {error && (
           <div className="p-4 bg-red-50 text-red-600 border border-red-200 rounded-2xl text-center">
-            {error.message.includes("API key") ? "OpenAI API Key is missing. Please configure it in .env to use the Mini Pastor." : "Something went wrong. Please try again."}
+            Something went wrong. Please try again.
           </div>
         )}
 
@@ -57,7 +65,9 @@ export default function PastorPage() {
                 ? 'bg-indigo-600 text-white rounded-tr-sm' 
                 : 'bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-tl-sm text-gray-800 dark:text-gray-200'
             }`}>
-              {m.content}
+              {m.parts.map((part, i) =>
+                part.type === 'text' ? <span key={i}>{part.text}</span> : null
+              )}
             </div>
           </div>
         ))}
@@ -77,10 +87,19 @@ export default function PastorPage() {
       </div>
 
       <div className="p-4 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 shrink-0">
-        <form onSubmit={handleSubmit} className="max-w-3xl mx-auto relative group">
+        <form
+          onSubmit={e => {
+            e.preventDefault();
+            if (input.trim() && !isLoading) {
+              sendMessage({ text: input });
+              setInput("");
+            }
+          }}
+          className="max-w-3xl mx-auto relative group"
+        >
           <input
             value={input}
-            onChange={handleInputChange}
+            onChange={e => setInput(e.target.value)}
             placeholder="Ask the pastor anything about faith..."
             className="w-full pl-6 pr-16 py-4 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-full focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none shadow-sm"
           />

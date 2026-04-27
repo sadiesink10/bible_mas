@@ -1,0 +1,42 @@
+version: "3.9"
+
+services:
+  # ── PostgreSQL Database ──────────────────────
+  db:
+    image: postgres:16-alpine
+    container_name: bible_mas_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: bible_user
+      POSTGRES_PASSWORD: bible_pass_2026
+      POSTGRES_DB: bible_mas
+    ports:
+      - "5432:5432"
+    volumes:
+      - bible_db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U bible_user -d bible_mas"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # ── Next.js Application ─────────────────────
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: bible_mas_app
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: postgresql://bible_user:bible_pass_2026@db:5432/bible_mas
+      AUTH_SECRET: ${AUTH_SECRET:-super-secret-change-me-in-production}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  bible_db_data:
+    driver: local
