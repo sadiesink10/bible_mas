@@ -1,7 +1,7 @@
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { BookOpen, LayoutDashboard, PlusCircle, MessageSquare, LogOut, Flame } from "lucide-react";
+import { BookOpen, LayoutDashboard, PlusCircle, MessageSquare, LogOut, Users } from "lucide-react";
 import { signOut } from "@/auth";
 
 export default async function AppLayout({
@@ -18,18 +18,19 @@ export default async function AppLayout({
     { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
     { name: "Read Bible", href: "/bible", icon: BookOpen },
     { name: "Log Reading", href: "/log", icon: PlusCircle },
+    { name: "Groups", href: "/groups", icon: Users },
     { name: "Mini Pastor", href: "/pastor", icon: MessageSquare },
   ];
 
   return (
-    <div className="flex h-screen bg-gray-50 dark:bg-gray-950 overflow-hidden">
+    <div className="flex h-screen bg-gradient-to-b from-pink-50 via-white to-blue-50 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 overflow-hidden">
       {/* Sidebar Navigation */}
-      <aside className="w-64 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 flex flex-col hidden md:flex">
-        <div className="h-16 flex items-center px-6 border-b border-gray-200 dark:border-gray-800">
-          <div className="bg-gradient-to-br from-indigo-500 to-purple-600 p-1.5 rounded-lg text-white shadow-md mr-3">
+      <aside className="w-64 bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl border-r border-pink-100 dark:border-slate-700 flex-col hidden md:flex">
+        <div className="h-16 flex items-center px-6 border-b border-pink-100 dark:border-slate-700">
+          <div className="bg-gradient-to-br from-pink-400 to-rose-500 p-1.5 rounded-lg text-white shadow-md shadow-pink-300/20 mr-3">
             <BookOpen className="w-5 h-5" />
           </div>
-          <span className="font-bold text-lg tracking-tight">ScriptureWalk</span>
+          <span className="font-bold text-lg tracking-tight text-slate-800 dark:text-white">ScriptureWalk</span>
         </div>
         
         <nav className="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
@@ -39,22 +40,22 @@ export default async function AppLayout({
               <Link
                 key={item.name}
                 href={item.href}
-                className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors font-medium"
+                className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-pink-50 dark:hover:bg-slate-700 transition-colors font-medium"
               >
-                <Icon className="w-5 h-5 text-indigo-500" />
+                <Icon className="w-5 h-5 text-pink-400" />
                 {item.name}
               </Link>
             );
           })}
         </nav>
 
-        <div className="p-4 border-t border-gray-200 dark:border-gray-800">
+        <div className="p-4 border-t border-pink-100 dark:border-slate-700">
           <div className="flex items-center gap-3 px-3 py-2 rounded-xl mb-2">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center text-white font-bold text-sm shadow-sm">
+            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-pink-300 to-rose-400 flex items-center justify-center text-white font-bold text-sm shadow-sm">
               {session.user.name?.[0]?.toUpperCase()}
             </div>
             <div className="flex flex-col overflow-hidden">
-              <span className="truncate text-sm font-semibold">{session.user.name}</span>
+              <span className="truncate text-sm font-semibold text-slate-700 dark:text-white">{session.user.name}</span>
             </div>
           </div>
           <form
@@ -63,7 +64,7 @@ export default async function AppLayout({
               await signOut();
             }}
           >
-            <button className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-gray-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors text-sm font-medium">
+            <button className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors text-sm font-medium">
               <LogOut className="w-4 h-4" />
               Sign Out
             </button>
@@ -74,10 +75,10 @@ export default async function AppLayout({
       {/* Main Content */}
       <main className="flex-1 flex flex-col h-screen overflow-hidden">
         {/* Mobile Header */}
-        <header className="md:hidden h-16 border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 flex items-center justify-between px-4">
+        <header className="md:hidden h-16 border-b border-pink-100 dark:border-slate-700 bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl flex items-center justify-between px-4">
           <div className="flex items-center gap-2">
-           <BookOpen className="w-6 h-6 text-indigo-500" />
-           <span className="font-bold">ScriptureWalk</span>
+           <BookOpen className="w-6 h-6 text-pink-400" />
+           <span className="font-bold text-slate-800 dark:text-white">ScriptureWalk</span>
           </div>
         </header>
 
@@ -87,14 +88,14 @@ export default async function AppLayout({
       </main>
 
       {/* Mobile Bottom Nav */}
-      <nav className="md:hidden h-16 border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 flex items-center justify-around px-2 pb-safe">
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 h-16 border-t border-pink-100 dark:border-slate-700 bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl flex items-center justify-around px-2 z-50">
         {navItems.map((item) => {
           const Icon = item.icon;
           return (
             <Link
               key={item.name}
               href={item.href}
-              className="flex flex-col items-center justify-center w-full h-full text-gray-500 hover:text-indigo-600 space-y-1"
+              className="flex flex-col items-center justify-center w-full h-full text-slate-400 hover:text-pink-500 space-y-1"
             >
               <Icon className="w-5 h-5" />
               <span className="text-[10px] font-medium">{item.name}</span>
