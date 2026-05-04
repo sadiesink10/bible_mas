@@ -2,8 +2,9 @@
 
 import { db } from "@/lib/db";
 import bcrypt from "bcryptjs";
-import { AuthError } from "next-auth";
 import { signIn } from "@/auth";
+import { AuthError } from "next-auth";
+import { redirect } from "next/navigation";
 
 export async function register(formData: FormData) {
   try {
@@ -45,14 +46,14 @@ export async function register(formData: FormData) {
 }
 
 export async function login(formData: FormData) {
+  const email = formData.get("email") as string;
+  const password = formData.get("password") as string;
+
   try {
-    const email = formData.get("email") as string;
-    const password = formData.get("password") as string;
-    
     await signIn("credentials", {
       email,
       password,
-      redirectTo: "/dashboard"
+      redirect: false,
     });
   } catch (error) {
     if (error instanceof AuthError) {
@@ -63,6 +64,10 @@ export async function login(formData: FormData) {
           return { error: "Something went wrong." };
       }
     }
+    // Don't re-throw NEXT_REDIRECT errors
     throw error;
   }
+
+  // Redirect after successful sign-in
+  redirect("/dashboard");
 }
