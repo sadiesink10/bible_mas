@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   --background: #f8f7f4;
   --foreground: #3d3d3d;
@@ -13,6 +15,22 @@
   --primary-dark: #5e7d54;
   --warm-bg: #f5f0e8;
   --border-soft: #e5dfd5;
+}
+
+/* Class-based dark mode (toggled via JS) */
+.dark {
+  --background: #1a1d21;
+  --foreground: #e0ddd5;
+  --card: #252830;
+  --border-soft: #363940;
+  --warm-bg: #1e2126;
+  --primary: #8fb585;
+  --primary-light: #3a4d36;
+  --primary-dark: #a8c5a0;
+  --accent-sage: #8fb585;
+  --accent-lavender: #9b8dc0;
+  --accent-cream: #c4b9a3;
+  --accent-sky: #7ea8c2;
 }
 
 @theme inline {
@@ -32,32 +50,17 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #1a1d21;
-    --foreground: #e0ddd5;
-    --card: #252830;
-    --border-soft: #363940;
-    --warm-bg: #1e2126;
-    --primary: #8fb585;
-    --primary-light: #3a4d36;
-    --primary-dark: #a8c5a0;
-    --accent-sage: #8fb585;
-    --accent-lavender: #9b8dc0;
-    --accent-cream: #c4b9a3;
-    --accent-sky: #7ea8c2;
-  }
-}
-
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* Soft scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 5px;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
@@ -65,4 +68,14 @@ body {
 ::-webkit-scrollbar-thumb {
   background: var(--accent-sage);
   border-radius: 3px;
+}
+
+/* Safe area for mobile bottom nav */
+.safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* Smooth page transitions */
+* {
+  scroll-behavior: smooth;
 }

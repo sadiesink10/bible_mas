@@ -1,8 +1,10 @@
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { BookOpen, LayoutDashboard, PlusCircle, MessageSquare, LogOut, Users } from "lucide-react";
+import { BookOpen, LayoutDashboard, PlusCircle, MessageSquare, LogOut, Users, Settings } from "lucide-react";
 import { signOut } from "@/auth";
+import { ThemeToggle } from "@/components/theme-toggle";
+import { DeleteAccountButton } from "@/components/delete-account-button";
 
 export default async function AppLayout({
   children,
@@ -24,13 +26,16 @@ export default async function AppLayout({
 
   return (
     <div className="flex h-screen bg-gradient-to-b from-[#f5f0e8] via-[#f8f7f4] to-[#eef3ed] dark:from-[#1a1d21] dark:via-[#1e2126] dark:to-[#1a1d21] overflow-hidden">
-      {/* Sidebar Navigation */}
+      {/* Desktop Sidebar */}
       <aside className="w-64 bg-white/80 dark:bg-[#252830]/80 backdrop-blur-xl border-r border-[#e5dfd5] dark:border-[#363940] flex-col hidden md:flex">
-        <div className="h-16 flex items-center px-6 border-b border-[#e5dfd5] dark:border-[#363940]">
-          <div className="bg-gradient-to-br from-[#7c9a72] to-[#5e7d54] p-1.5 rounded-lg text-white shadow-md shadow-[#7c9a72]/15 mr-3">
-            <BookOpen className="w-5 h-5" />
+        <div className="h-16 flex items-center justify-between px-5 border-b border-[#e5dfd5] dark:border-[#363940]">
+          <div className="flex items-center gap-2.5">
+            <div className="bg-gradient-to-br from-[#7c9a72] to-[#5e7d54] p-1.5 rounded-lg text-white shadow-md shadow-[#7c9a72]/15">
+              <BookOpen className="w-5 h-5" />
+            </div>
+            <span className="font-bold text-lg tracking-tight text-[#3d3d3d] dark:text-white">ScriptureWalk</span>
           </div>
-          <span className="font-bold text-lg tracking-tight text-[#3d3d3d] dark:text-white">ScriptureWalk</span>
+          <ThemeToggle />
         </div>
         
         <nav className="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
@@ -49,13 +54,14 @@ export default async function AppLayout({
           })}
         </nav>
 
-        <div className="p-4 border-t border-[#e5dfd5] dark:border-[#363940]">
-          <div className="flex items-center gap-3 px-3 py-2 rounded-xl mb-2">
+        <div className="p-4 border-t border-[#e5dfd5] dark:border-[#363940] space-y-1">
+          <div className="flex items-center gap-3 px-3 py-2 rounded-xl">
             <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#a8c5a0] to-[#7c9a72] flex items-center justify-center text-white font-bold text-sm shadow-sm">
               {session.user.name?.[0]?.toUpperCase()}
             </div>
             <div className="flex flex-col overflow-hidden">
               <span className="truncate text-sm font-semibold text-[#4a4a4a] dark:text-white">{session.user.name}</span>
+              <span className="truncate text-[10px] text-[#9a9a9a] dark:text-[#6b6860]">{session.user.email}</span>
             </div>
           </div>
           <form
@@ -69,36 +75,49 @@ export default async function AppLayout({
               Sign Out
             </button>
           </form>
+          <DeleteAccountButton />
         </div>
       </aside>
 
-      {/* Main Content */}
+      {/* Main Content Area */}
       <main className="flex-1 flex flex-col h-screen overflow-hidden">
         {/* Mobile Header */}
-        <header className="md:hidden h-16 border-b border-[#e5dfd5] dark:border-[#363940] bg-white/80 dark:bg-[#252830]/80 backdrop-blur-xl flex items-center justify-between px-4">
+        <header className="md:hidden h-14 border-b border-[#e5dfd5] dark:border-[#363940] bg-white/80 dark:bg-[#252830]/80 backdrop-blur-xl flex items-center justify-between px-4 shrink-0">
           <div className="flex items-center gap-2">
-           <BookOpen className="w-6 h-6 text-[#7c9a72]" />
-           <span className="font-bold text-[#3d3d3d] dark:text-white">ScriptureWalk</span>
+            <BookOpen className="w-5 h-5 text-[#7c9a72]" />
+            <span className="font-bold text-sm text-[#3d3d3d] dark:text-white">ScriptureWalk</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <ThemeToggle />
+            <Link
+              href="/settings"
+              className="w-9 h-9 rounded-xl flex items-center justify-center bg-[#eef3ed] dark:bg-[#363940] text-[#7c9a72]"
+            >
+              <Settings className="w-4 h-4" />
+            </Link>
           </div>
         </header>
 
-        <div className="flex-1 overflow-y-auto w-full max-w-6xl mx-auto">
-          {children}
+        {/* Scrollable content */}
+        <div className="flex-1 overflow-y-auto w-full pb-20 md:pb-0">
+          <div className="w-full max-w-5xl mx-auto">
+            {children}
+          </div>
         </div>
       </main>
 
       {/* Mobile Bottom Nav */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 h-16 border-t border-[#e5dfd5] dark:border-[#363940] bg-white/90 dark:bg-[#252830]/90 backdrop-blur-xl flex items-center justify-around px-2 z-50">
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 h-16 border-t border-[#e5dfd5] dark:border-[#363940] bg-white/95 dark:bg-[#252830]/95 backdrop-blur-xl flex items-center justify-around px-1 z-50 safe-area-bottom">
         {navItems.map((item) => {
           const Icon = item.icon;
           return (
             <Link
               key={item.name}
               href={item.href}
-              className="flex flex-col items-center justify-center w-full h-full text-[#9a9a9a] hover:text-[#7c9a72] space-y-1"
+              className="flex flex-col items-center justify-center w-full h-full text-[#9a9a9a] hover:text-[#7c9a72] active:text-[#5e7d54] space-y-0.5 transition-colors"
             >
               <Icon className="w-5 h-5" />
-              <span className="text-[10px] font-medium">{item.name}</span>
+              <span className="text-[9px] font-semibold leading-tight">{item.name}</span>
             </Link>
           );
         })}

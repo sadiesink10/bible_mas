@@ -24,6 +24,7 @@ model User {
   streaks        StreakHistory[]
   createdGroups  StudyGroup[]   @relation("CreatedGroups")
   groupMemberships GroupMember[]
+  groupMessages  GroupMessage[]
 }
 
 model ReadingEntry {
@@ -64,6 +65,7 @@ model StudyGroup {
   createdBy   User          @relation("CreatedGroups", fields: [createdById], references: [id], onDelete: Cascade)
   createdAt   DateTime      @default(now())
   members     GroupMember[]
+  messages    GroupMessage[]
 }
 
 model GroupMember {
@@ -78,3 +80,14 @@ model GroupMember {
   @@unique([userId, groupId])
 }
 
+model GroupMessage {
+  id        String     @id @default(uuid())
+  content   String
+  userId    String
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  groupId   String
+  group     StudyGroup @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  createdAt DateTime   @default(now())
+
+  @@index([groupId, createdAt])
+}
