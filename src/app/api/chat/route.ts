@@ -1,9 +1,19 @@
 import { NextRequest } from "next/server";
+import { readFile } from "fs/promises";
+import path from "path";
 
 export const maxDuration = 30;
 export const dynamic = "force-dynamic";
 
-// Extensive verse database
+// Cache Bible data in memory
+let bibleCache: any[] | null = null;
+async function loadBible() {
+  if (bibleCache) return bibleCache;
+  const filePath = path.join(process.cwd(), "public", "kjv.json");
+  const data = await readFile(filePath, "utf-8");
+  bibleCache = JSON.parse(data);
+  return bibleCache!;
+}
 const VERSES: Record<string, string> = {
   "john 3:16": `🕊️ **John 3:16** — "For God so loved the world, that he gave his only begotten Son, that whosoever believeth in him should not perish, but have everlasting life."\n\nThis is the heart of the Gospel:\n• **God's love** — universal, for the whole world\n• **God's gift** — sacrificial, His only Son\n• **God's promise** — eternal life through faith\n\nSalvation is not earned — it's received by believing. 💛`,
 
@@ -147,33 +157,130 @@ const MORE_TOPICS: Record<string, string> = {
   work: `💼 **Work & Money**\n\n"Whatsoever ye do, do it heartily, as to the Lord." — Colossians 3:23\n\n• **Proverbs 10:4** — "The hand of the diligent maketh rich"\n• **Matthew 6:33** — "Seek ye first the kingdom of God"\n• **Philippians 4:19** — "My God shall supply all your need"\n• **Proverbs 3:9** — "Honour the LORD with thy substance"\n• **1 Timothy 6:10** — "The love of money is the root of all evil"\n\nWork is worship when done for God's glory. He is your ultimate provider. 🙏`,
 };
 
-function findResponse(userMessage: string, conversationHistory: string[] = []): string {
+async function fetchBibleVerse(bookName: string, chapter: number, verse?: number): Promise<string | null> {
+  try {
+    const bible = await loadBible();
+    // Find book (case-insensitive, handle psalms/psalm)
+    const searchName = bookName.toLowerCase().replace("psalms", "psalm");
+    const book = bible.find((b: any) => b.name.toLowerCase() === searchName || b.name.toLowerCase().replace("psalms", "psalm") === searchName);
+    if (!book) return null;
+    if (chapter < 1 || chapter > book.chapters.length) return null;
+    
+    const chapterVerses = book.chapters[chapter - 1];
+    
+    if (verse && verse > 0) {
+      if (verse > chapterVerses.length) return null;
+      return `📖 **${book.name} ${chapter}:${verse}** (KJV)\n\n"${chapterVerses[verse - 1]}"\n\nThis verse is from ${book.name}, chapter ${chapter}. 🙏`;
+    }
+    
+    // Return first few verses of the chapter as a preview
+    const preview = chapterVerses.slice(0, Math.min(5, chapterVerses.length));
+    const versesText = preview.map((v: string, i: number) => `**${i + 1}.** ${v}`).join("\n\n");
+    const remaining = chapterVerses.length - preview.length;
+    
+    return `📖 **${book.name} ${chapter}** (KJV)\n\n${versesText}${remaining > 0 ? `\n\n_...and ${remaining} more verses. Open "Read Bible" to read the full chapter!_` : ""}\n\nThis chapter has ${chapterVerses.length} verses total. 🙏`;
+  } catch {
+    return null;
+  }
+}
+
+// Also handle verse ranges like "song of solomon 4 1-7"
+function parseVerseRange(text: string): { book: string; chapter: number; startVerse: number; endVerse: number } | null {
+  const lower = text.toLowerCase().replace(/['']/g, "'").trim();
+  const rangeMatch = lower.match(/^(?:explain\s+(?:about\s+)?|what (?:does|is|about) )?(?:the )?([\d]?\s?[a-z]+(?:\s+of\s+[a-z]+)?)\s+(\d+)\s+(\d+)\s*[-–]\s*(\d+)/);
+  if (rangeMatch) {
+    let book = rangeMatch[1].trim();
+    const bookMap: Record<string, string> = {
+      gen: "genesis", ex: "exodus", lev: "leviticus", num: "numbers", deut: "deuteronomy",
+      ps: "psalms", psa: "psalms", prov: "proverbs", song: "song of solomon",
+      isa: "isaiah", jer: "jeremiah", matt: "matthew", mk: "mark", lk: "luke", jn: "john",
+      rom: "romans", rev: "revelation",
+    };
+    for (const [abbr, full] of Object.entries(bookMap)) {
+      if (book === abbr) { book = full; break; }
+    }
+    return { book, chapter: parseInt(rangeMatch[2]), startVerse: parseInt(rangeMatch[3]), endVerse: parseInt(rangeMatch[4]) };
+  }
+  return null;
+}
+
+async function fetchVerseRange(bookName: string, chapter: number, startVerse: number, endVerse: number): Promise<string | null> {
+  try {
+    const bible = await loadBible();
+    const searchName = bookName.toLowerCase();
+    const book = bible.find((b: any) => b.name.toLowerCase() === searchName);
+    if (!book || chapter < 1 || chapter > book.chapters.length) return null;
+
+    const chapterVerses = book.chapters[chapter - 1];
+    const start = Math.max(1, startVerse);
+    const end = Math.min(chapterVerses.length, endVerse);
+
+    const selected = chapterVerses.slice(start - 1, end);
+    const versesText = selected.map((v: string, i: number) => `**${start + i}.** ${v}`).join("\n\n");
+    return `📖 **${book.name} ${chapter}:${start}-${end}** (KJV)\n\n${versesText}\n\n🙏`;
+  } catch {
+    return null;
+  }
+}
+
+async function findResponse(userMessage: string, conversationHistory: string[] = []): Promise<string> {
   const lower = userMessage.toLowerCase().trim();
 
-  // 1. Try parsing as a verse reference
+  // 0. Check for verse range like "song of solomon 4 1-7"
+  const range = parseVerseRange(lower);
+  if (range) {
+    const result = await fetchVerseRange(range.book, range.chapter, range.startVerse, range.endVerse);
+    if (result) return result;
+  }
+
+  // 1. Try parsing as a verse reference and fetch from REAL Bible data
   const ref = parseVerseRef(lower);
   if (ref) {
+    // Parse "book chapter:verse" or "book chapter"
+    const parts = ref.match(/^(.+?)\s+(\d+)(?::(\d+))?$/);
+    if (parts) {
+      const bookName = parts[1];
+      const chapter = parseInt(parts[2]);
+      const verse = parts[3] ? parseInt(parts[3]) : undefined;
+      
+      // Try real Bible data first
+      const realVerse = await fetchBibleVerse(bookName, chapter, verse);
+      if (realVerse) return realVerse;
+    }
+    
+    // Fall back to enriched hardcoded responses  
     if (VERSES[ref]) return VERSES[ref];
     const chapterOnly = ref.replace(/:\d+$/, "");
     if (VERSES[chapterOnly]) return VERSES[chapterOnly];
     for (const [key, val] of Object.entries(VERSES)) {
       if (key.startsWith(chapterOnly) || ref.startsWith(key)) return val;
     }
-    // Verse not in our database — give helpful response
-    return `📖 I don't have **${ref}** in my database yet, but here's what I can help with:\n\n• Try popular verses like **John 3:16**, **Psalm 23**, or **Romans 8:28**\n• Ask about topics: love, faith, prayer, forgiveness, anxiety\n• Or tell me what's on your heart and I'll find the right Scripture for you.\n\nThe full Bible is available in the "Read Bible" section of the app! 📖`;
+    
+    return `📖 I couldn't find that exact reference. Try:\n• A specific verse like "John 3:16" or "Psalm 23:1"\n• A chapter like "Genesis 1" or "Romans 8"\n• A topic like "love", "faith", or "prayer"\n\nThe full Bible is available in the "Read Bible" section! 📖`;
   }
 
-  // 2. Direct key lookup in verses
+  // 2. Check if message contains a book name + chapter mentioned naturally
+  // e.g. "explain about sin" won't match, but "tell me about genesis 3" will
+  const naturalRef = lower.match(/(?:tell me about|explain|read|show me|what is|what does)\s+([\d]?\s?[a-z]+(?:\s+of\s+[a-z]+)?)\s+(\d+)(?:[:\s]+(\d+))?/);
+  if (naturalRef) {
+    const bookName = naturalRef[1].trim();
+    const chapter = parseInt(naturalRef[2]);
+    const verse = naturalRef[3] ? parseInt(naturalRef[3]) : undefined;
+    const realVerse = await fetchBibleVerse(bookName, chapter, verse);
+    if (realVerse) return realVerse;
+  }
+
+  // 3. Direct key lookup in hardcoded verses
   for (const [key, response] of Object.entries(VERSES)) {
     if (lower.includes(key)) return response;
   }
 
-  // 3. Enhanced topic matching with more categories
+  // 4. Enhanced topic matching
   const topicMap: Record<string, string[]> = {
     peace: ["peace", "calm", "rest", "tranquil", "serene", "still", "quiet", "silence"],
     anxiety: ["anxiety", "anxious", "worried", "worry", "stress", "nervous", "fear", "afraid", "overwhelmed", "panic", "scared", "terrified"],
     forgiveness: ["forgive", "forgiveness", "guilt", "guilty", "ashamed", "shame", "regret", "sorry", "mistake"],
-    love: ["love", "loved", "loving", "caring"],
+    love: ["love", "loved", "loving", "caring", "true love"],
     marriage: ["marriage", "marry", "married", "wife", "husband", "spouse", "wedding", "dating", "girlfriend", "boyfriend", "relationship", "romance", "romantic", "soulmate", "partner"],
     strength: ["strength", "strong", "weak", "tired", "exhausted", "give up", "hopeless", "can't go on", "burnout", "burned out"],
     faith: ["faith", "believe", "doubt", "trust", "uncertain", "unbelief"],
@@ -184,12 +291,13 @@ function findResponse(userMessage: string, conversationHistory: string[] = []): 
     purpose: ["purpose", "calling", "destiny", "meaning", "why am i", "what should i", "direction", "confused about life", "lost in life"],
     gratitude: ["grateful", "gratitude", "thankful", "thanksgiving", "blessed", "blessings", "count"],
     anger: ["anger", "angry", "furious", "mad", "rage", "frustrated", "frustration", "annoyed", "irritated"],
-    temptation: ["temptation", "tempted", "resist", "lust", "addicted", "addiction", "porn", "craving"],
+    temptation: ["temptation", "tempted", "resist", "lust", "addicted", "addiction", "craving"],
     wisdom: ["wisdom", "wise", "decision", "choose", "discernment", "guidance", "confused"],
     family: ["family", "parent", "parents", "mother", "father", "children", "child", "son", "daughter", "sibling", "brother", "sister"],
     loneliness: ["lonely", "alone", "isolated", "nobody", "no friends", "no one", "friendless"],
-    hope: ["hope", "hopeless", "give up", "no hope", "it's over", "done", "finished", "end"],
+    hope: ["hope", "hopeless", "no hope", "it's over", "done", "finished"],
     work: ["work", "job", "career", "money", "financial", "finances", "business", "salary", "debt", "broke"],
+    sin: ["sin", "sinful", "sinning", "sinner", "transgression", "iniquity", "wickedness", "evil", "wrong"],
   };
 
   for (const [topic, keywords] of Object.entries(topicMap)) {
@@ -199,48 +307,43 @@ function findResponse(userMessage: string, conversationHistory: string[] = []): 
     }
   }
 
-  // 4. Emotional crisis detection
+  // 5. Emotional crisis detection
   if (/kill myself|suicide|want to die|end it all|not worth living|self harm/i.test(lower)) {
-    return `🤍 **Please hear this:** You are deeply loved, valued, and seen — by God and by people around you.\n\n"For I know the thoughts that I think toward you, saith the LORD, thoughts of peace, and not of evil, to give you an expected end." — Jeremiah 29:11\n\n• **Psalm 34:18** — "The LORD is nigh unto them that are of a broken heart"\n• **Isaiah 43:4** — "Thou wast precious in my sight... and I have loved thee"\n\n🆘 **Please reach out for help:**\n• **988 Suicide & Crisis Lifeline** — Call or text **988**\n• **Crisis Text Line** — Text HOME to **741741**\n\nYour life matters. This season will pass. God is not done with your story. 💛`;
+    return `🤍 **Please hear this:** You are deeply loved, valued, and seen — by God and by people around you.\n\n"For I know the thoughts that I think toward you, saith the LORD, thoughts of peace, and not of evil, to give you an expected end." — Jeremiah 29:11\n\n🆘 **Please reach out for help:**\n• **988 Suicide & Crisis Lifeline** — Call or text **988**\n• **Crisis Text Line** — Text HOME to **741741**\n\nYour life matters. God is not done with your story. 💛`;
   }
 
-  // 5. Greetings
+  // 6. Greetings
   if (/^(hi|hello|hey|good morning|good evening|good night|greetings|yo|sup|what's up)/i.test(lower)) {
-    const greetings = [
-      `Hello! 🌟 I'm the Mini Pastor — here to help you explore Scripture and grow in faith.\n\nYou can ask me:\n• 📖 Any verse — "John 3:16", "Psalm 23"\n• 💬 Life topics — love, anxiety, forgiveness, hope, purpose\n• 🙏 Spiritual questions — prayer, faith, salvation\n• 💪 Encouragement when you need it\n\nWhat's on your heart today? 💛`,
-      `Peace be with you! 🕊️ Welcome to Mini Pastor.\n\nI'm here to walk with you through Scripture. Try:\n• A verse like "Romans 8:28" or "Isaiah 41:10"\n• A question like "How should I pray?"\n• Or just tell me what you're going through\n\nI'm listening. 💛`,
-    ];
-    return greetings[Math.floor(Math.random() * greetings.length)];
+    return `Hello! 🌟 I'm Mini Pastor — connected to the full KJV Bible!\n\nYou can ask me:\n• 📖 **Any verse** — "John 3:16", "Genesis 1:1", "Psalm 23"\n• 📚 **Any chapter** — "Romans 8", "Matthew 5"\n• 📖 **Verse ranges** — "Song of Solomon 4 1-7"\n• 💬 **Topics** — love, faith, prayer, sin, marriage, anxiety\n• 💪 **Encouragement** — when you need strength\n\nWhat's on your heart? 💛`;
   }
 
-  // 6. Thank you
+  // 7. Thank you
   if (/thank|thanks|appreciate|blessed|amen/i.test(lower)) {
-    return `You're so welcome! 🙏\n\n"Give thanks unto the LORD; for he is good: for his mercy endureth for ever." — Psalm 136:1\n\nRemember:\n• Keep reading the Word daily 📖\n• Pray without ceasing 🙏\n• Share what you've learned with others 💛\n\nGod loves you more than you'll ever know. Keep walking with Him! 🕊️`;
+    return `You're so welcome! 🙏\n\n"Give thanks unto the LORD; for he is good." — Psalm 136:1\n\nKeep reading, keep praying, keep growing. God is with you! 💛🕊️`;
   }
 
-  // 7. "Who are you" / "what can you do"
-  if (/who are you|what are you|what can you do|what do you do|help me|how does this work/i.test(lower)) {
-    return `🌟 **I'm Mini Pastor** — your personal Bible study companion!\n\nHere's what I can help with:\n\n📖 **Bible Verses** — Ask about any verse (e.g., "John 3:16", "Psalm 91")\n💬 **Life Topics** — Love, marriage, anxiety, forgiveness, patience, purpose, anger, temptation, hope, loneliness, work\n🙏 **Spiritual Growth** — Prayer, faith, salvation, wisdom\n💪 **Encouragement** — When life gets tough\n✝️ **The Gospel** — Understanding salvation\n\nJust type your question or what's on your heart! 💛`;
+  // 8. Who are you
+  if (/who are you|what are you|what can you do|help me|how does this work/i.test(lower)) {
+    return `🌟 **I'm Mini Pastor** — connected to the full KJV Bible!\n\nI can look up:\n📖 **Any verse** in the entire Bible (e.g., "John 3:16", "Genesis 1:1")\n📚 **Full chapters** (e.g., "Psalm 23", "Romans 8")\n📖 **Verse ranges** (e.g., "Song of Solomon 4 1-7")\n💬 **20+ topics** — love, marriage, sin, anxiety, forgiveness, patience, purpose, anger, hope, work, and more\n\nJust type your question! 💛`;
   }
 
-  // 8. General Bible/spiritual question
+  // 9. General Bible/spiritual question
   if (/bible|scripture|verse|god|jesus|christ|lord|church|sin|heaven|spirit|holy|worship|commandment/i.test(lower)) {
-    return `🙏 That's a wonderful thing to think about!\n\nHere are some foundational Scriptures:\n\n• **John 3:16** — God's love for the world\n• **Proverbs 3:5-6** — Trust in the LORD\n• **Romans 8:28** — All things work for good\n• **Psalm 23** — The Lord is my shepherd\n• **Philippians 4:13** — Strength through Christ\n\nWant me to go deeper on any of these? Or ask about a specific topic like love, faith, or prayer! 📖✨`;
+    return `🙏 Here are some key Scriptures:\n\n• **John 3:16** — God's love for the world\n• **Proverbs 3:5-6** — Trust in the LORD\n• **Romans 8:28** — All things work for good\n• **Psalm 23** — The Lord is my shepherd\n\nI can look up **any verse** in the entire Bible! Just type a reference like "Genesis 1:1" or "Revelation 21:4". 📖✨`;
   }
 
-  // 9. Conversational follow-ups
+  // 10. Follow-ups
   if (/tell me more|explain|go deeper|more about|continue|what else|another|more verses/i.test(lower)) {
-    return `📖 Here are more powerful Scriptures to meditate on:\n\n• **Psalm 46:10** — "Be still, and know that I am God"\n• **2 Timothy 1:7** — "God hath not given us the spirit of fear"\n• **Hebrews 11:1** — "Faith is the substance of things hoped for"\n• **Matthew 11:28** — "Come unto me, all ye that labour and are heavy laden, and I will give you rest"\n• **Psalm 37:4** — "Delight thyself also in the LORD; and he shall give thee the desires of thine heart"\n\nWould you like to explore a specific topic? 💛`;
+    return `📖 Here are more powerful Scriptures:\n\n• **Psalm 46:10** — "Be still, and know that I am God"\n• **2 Timothy 1:7** — "God hath not given us the spirit of fear"\n• **Hebrews 11:1** — "Faith is the substance of things hoped for"\n• **Matthew 11:28** — "Come unto me, all ye that labour"\n\nI can fetch **any verse** from the Bible! Try typing a reference. 💛`;
   }
 
-  // 10. Default — more helpful
-  return `🕊️ I'd love to help you with that!\n\nHere's what I'm best at:\n\n📖 **Verses** — Type any reference like "John 3:16" or "Psalm 23"\n💬 **Topics** — Ask about love, faith, prayer, anxiety, forgiveness, hope, marriage, patience, purpose, or anger\n🙏 **Questions** — "How should I pray?", "What is salvation?", "I need strength"\n💪 **Comfort** — Tell me what you're going through\n\nTry one of these, or just speak from your heart — I'm here for you. 💛`;
+  // 11. Default
+  return `🕊️ I'd love to help!\n\nI'm connected to the **full KJV Bible** — I can look up any verse!\n\n📖 **Verses** — "John 3:16", "Genesis 1:1", "Psalm 119:105"\n📚 **Chapters** — "Matthew 5", "Romans 8"\n💬 **Topics** — love, faith, sin, prayer, anxiety, marriage, hope\n\nJust type a verse reference or question! 💛`;
 }
 
 export async function POST(req: NextRequest) {
   const { messages } = await req.json();
 
-  // Get conversation context
   const userMessages = messages.filter((m: any) => m.role === "user");
   const lastUserMsg = userMessages[userMessages.length - 1];
   let userText = "";
@@ -250,9 +353,8 @@ export async function POST(req: NextRequest) {
       : lastUserMsg.content || "";
   }
 
-  // Pass conversation history for context
   const history = userMessages.slice(0, -1).map((m: any) => m.content || "");
-  const response = findResponse(userText, history);
+  const response = await findResponse(userText, history);
 
   const encoder = new TextEncoder();
   const stream = new ReadableStream({

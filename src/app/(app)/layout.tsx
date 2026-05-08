@@ -1,10 +1,11 @@
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { BookOpen, LayoutDashboard, PlusCircle, MessageSquare, LogOut, Users, Settings } from "lucide-react";
+import { BookOpen, LayoutDashboard, PlusCircle, MessageSquare, LogOut, Users, Settings, Heart } from "lucide-react";
 import { signOut } from "@/auth";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { DeleteAccountButton } from "@/components/delete-account-button";
+import { CreatorNote } from "@/components/creator-note";
 
 export default async function AppLayout({
   children,
@@ -121,6 +122,9 @@ export default async function AppLayout({
             </Link>
           );
         })}
+        <div className="flex flex-col items-center justify-center w-full h-full space-y-0.5">
+          <CreatorNote compact />
+        </div>
       </nav>
     </div>
   );

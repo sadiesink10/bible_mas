@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { Heart, Lock, X, KeyRound } from "lucide-react";
 
-export function CreatorNote() {
+export function CreatorNote({ compact = false }: { compact?: boolean }) {
   const [showLock, setShowLock] = useState(false);
   const [code, setCode] = useState("");
   const [unlocked, setUnlocked] = useState(false);
@@ -27,10 +27,13 @@ export function CreatorNote() {
     return (
       <button
         onClick={() => setShowLock(true)}
-        className="inline-flex items-center gap-1.5 text-sm text-[#c8c4bc] dark:text-[#6b6860] hover:text-[#c4956a] transition-all hover:scale-110 mx-auto"
+        className={compact
+          ? "flex flex-col items-center justify-center text-[#9a9a9a] hover:text-red-400 transition-colors space-y-0.5"
+          : "inline-flex items-center gap-1.5 text-sm text-[#c8c4bc] dark:text-[#6b6860] hover:text-[#c4956a] transition-all hover:scale-110 mx-auto"
+        }
       >
-        <span>Made with</span>
-        <Heart className="w-4 h-4 fill-current text-red-400 hover:text-red-500 animate-pulse" />
+        <Heart className={compact ? "w-5 h-5 fill-current text-red-400 animate-pulse" : "w-4 h-4 fill-current text-red-400 hover:text-red-500 animate-pulse"} />
+        {compact ? <span className="text-[9px] font-semibold leading-tight">🤍</span> : <span>Made with</span>}
       </button>
     );
   }
