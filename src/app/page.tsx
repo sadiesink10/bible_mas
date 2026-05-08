@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { BookOpen, Sparkles, TrendingUp, Users, Heart } from "lucide-react";
+import { CreatorNote } from "@/components/creator-note";
 
 export default function Home() {
   return (
@@ -76,6 +77,7 @@ export default function Home() {
           </div>
         </div>
       </main>
+      <CreatorNote />
     </div>
   );
 }

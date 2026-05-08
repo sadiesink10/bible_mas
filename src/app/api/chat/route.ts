@@ -3,131 +3,267 @@ import { NextRequest } from "next/server";
 export const maxDuration = 30;
 export const dynamic = "force-dynamic";
 
-// Comprehensive Bible knowledge base for the offline Mini Pastor
-const BIBLE_RESPONSES: Record<string, string> = {
-  // Key verses
-  "john 3:16": "🕊️ **John 3:16** — \"For God so loved the world, that he gave his only begotten Son, that whosoever believeth in him should not perish, but have everlasting life.\"\n\nThis is perhaps the most well-known verse in all of Scripture. It reveals the heart of the Gospel:\n\n• **God's love** is universal — He loves the *whole* world\n• **God's gift** is sacrificial — He gave His only Son\n• **God's promise** is eternal — whoever believes will have everlasting life\n\nThis verse reminds us that salvation is not earned through works, but received through faith. God made the first move out of pure love. 💛",
-  
-  "psalm 23": "🐑 **Psalm 23** — The Shepherd's Psalm\n\n\"The LORD is my shepherd; I shall not want. He maketh me to lie down in green pastures: he leadeth me beside the still waters. He restoreth my soul...\"\n\nThis beloved psalm, written by King David, paints a beautiful picture of God as our caring Shepherd:\n\n• **Provider** — \"I shall not want\"\n• **Comforter** — \"He restoreth my soul\"\n• **Protector** — \"Though I walk through the valley of the shadow of death, I will fear no evil\"\n• **Host** — \"Thou preparest a table before me\"\n\nNo matter what valley you're walking through, the Good Shepherd is right there with you. 🙏",
+// Extensive verse database
+const VERSES: Record<string, string> = {
+  "john 3:16": `🕊️ **John 3:16** — "For God so loved the world, that he gave his only begotten Son, that whosoever believeth in him should not perish, but have everlasting life."\n\nThis is the heart of the Gospel:\n• **God's love** — universal, for the whole world\n• **God's gift** — sacrificial, His only Son\n• **God's promise** — eternal life through faith\n\nSalvation is not earned — it's received by believing. 💛`,
 
-  "romans 8:28": "✨ **Romans 8:28** — \"And we know that all things work together for good to them that love God, to them who are the called according to his purpose.\"\n\nThis verse is a powerful promise:\n\n• It doesn't say all things *are* good — but that they *work together* for good\n• It's for those who love God and are called according to His purpose\n• God is sovereign over every circumstance\n\nEven in your hardest seasons, God is weaving something beautiful. Trust the process. 🌟",
+  "john 3:17": `📖 **John 3:17** — "For God sent not his Son into the world to condemn the world; but that the world through him might be saved."\n\nJesus didn't come to judge — He came to rescue. God's heart is always redemption, not condemnation. 🙏`,
 
-  "jeremiah 29:11": "🌅 **Jeremiah 29:11** — \"For I know the thoughts that I think toward you, saith the LORD, thoughts of peace, and not of evil, to give you an expected end.\"\n\nContext matters here — God spoke this to the Israelites during their exile in Babylon. They were in a difficult season, but God promised:\n\n• He has **plans** for you — not random, but intentional\n• His plans are for **peace**, not harm\n• He promises **hope and a future**\n\nIf you're in a difficult season, remember: your current chapter is not your final chapter. 🙏",
+  "john 14:6": `✝️ **John 14:6** — "Jesus saith unto him, I am the way, the truth, and the life: no man cometh unto the Father, but by me."\n\nJesus claims to be:\n• **The Way** — the only path to God\n• **The Truth** — absolute reality\n• **The Life** — the source of eternal life\n\nThis is one of the most definitive statements Jesus made about Himself. 🌟`,
 
-  "philippians 4:13": "💪 **Philippians 4:13** — \"I can do all things through Christ which strengtheneth me.\"\n\nPaul wrote this from *prison*. The context is about contentment in every circumstance:\n\n• It's not about superhuman ability — it's about **divine strength** in weakness\n• Paul had learned to be content whether in plenty or in need\n• The strength comes from *Christ*, not from ourselves\n\nWhatever challenge you face today, you don't face it alone. Christ strengthens you! 🔥",
+  "john 14:27": `🕊️ **John 14:27** — "Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you. Let not your heart be troubled, neither let it be afraid."\n\nJesus offers a peace that the world cannot give — it transcends circumstances. 💛`,
 
-  "matthew 5": "⛰️ **The Sermon on the Mount (Matthew 5-7)**\n\nThis is Jesus' greatest teaching, covering:\n\n**The Beatitudes (5:3-12):**\n• Blessed are the poor in spirit, the meek, the merciful, the peacemakers...\n\n**Salt & Light (5:13-16):**\n• \"Ye are the salt of the earth... Ye are the light of the world\"\n\n**Key teachings:**\n• Love your enemies (5:44)\n• Turn the other cheek (5:39)\n• Don't worry about tomorrow (6:34)\n• Judge not, that ye be not judged (7:1)\n• The Golden Rule (7:12)\n\nJesus was laying out a radically different way of living — one rooted in love, humility, and faith. 🌟",
+  "john 1:1": `📖 **John 1:1** — "In the beginning was the Word, and the Word was with God, and the Word was God."\n\nThis verse reveals:\n• Jesus (the Word) existed from eternity\n• He was with God — in relationship\n• He was God — fully divine\n\nThe opening of John's Gospel echoes Genesis 1:1. 🌟`,
 
-  "genesis 1": "🌍 **Genesis 1** — The Creation\n\n\"In the beginning God created the heaven and the earth.\"\n\nThe seven days of creation:\n• Day 1: Light and darkness\n• Day 2: Sky and waters\n• Day 3: Land, seas, and vegetation\n• Day 4: Sun, moon, and stars\n• Day 5: Sea creatures and birds\n• Day 6: Animals and **humanity** (in God's image!)\n• Day 7: God rested\n\n\"And God saw every thing that he had made, and, behold, it was very good.\" (Genesis 1:31)\n\nYou are fearfully and wonderfully made, created in the image of the Almighty! 🙏",
+  "john 11:35": `😢 **John 11:35** — "Jesus wept."\n\nThe shortest verse in the Bible, yet one of the most powerful. Jesus wept at Lazarus' tomb — showing that God feels our pain deeply. He is not distant; He grieves with us. 💛`,
 
-  "proverbs 3:5": "🧭 **Proverbs 3:5-6** — \"Trust in the LORD with all thine heart; and lean not unto thine own understanding. In all thy ways acknowledge him, and he shall direct thy paths.\"\n\nThis is one of the most practical verses in the Bible:\n\n• **Trust** — with ALL your heart, not just part\n• **Don't lean** on your own understanding — our perspective is limited\n• **Acknowledge Him** in everything — not just the big decisions\n• **He will direct** — God promises to guide you\n\nWhen life feels confusing, choose trust over worry. God sees the full picture. 🌟",
+  "john 15:13": `❤️ **John 15:13** — "Greater love hath no man than this, that a man lay down his life for his friends."\n\nJesus modeled the ultimate love — sacrificial, selfless, complete. This is the standard of love we're called to. 🙏`,
+
+  "john 19:23": `📖 **John 19:23-24** — "Then the soldiers, when they had crucified Jesus, took his garments, and made four parts, to every soldier a part; and also his coat: now the coat was without seam, woven from the top throughout. They said therefore among themselves, Let us not rend it, but cast lots for it, whose it shall be: that the scripture might be fulfilled."\n\nThis happened at the crucifixion:\n• The Roman soldiers divided Jesus' clothing\n• His seamless tunic was gambled for, fulfilling Psalm 22:18\n• Even in His darkest hour, prophecy was being fulfilled\n\nThis shows that nothing — not even the cruelty of the cross — was outside God's sovereign plan. 🙏✝️`,
+
+  "john 19:30": `✝️ **John 19:30** — "When Jesus therefore had received the vinegar, he said, It is finished: and he bowed his head, and gave up the ghost."\n\n"It is finished" (Tetelestai) means:\n• The debt of sin is PAID IN FULL\n• The work of salvation is COMPLETE\n• Nothing more needs to be added\n\nThree of the most powerful words ever spoken. 🙏`,
+
+  "psalm 23": `🐑 **Psalm 23** — The Shepherd's Psalm\n\n"The LORD is my shepherd; I shall not want. He maketh me to lie down in green pastures: he leadeth me beside the still waters. He restoreth my soul..."\n\nDavid paints God as:\n• **Provider** — "I shall not want"\n• **Comforter** — "He restoreth my soul"\n• **Protector** — "I will fear no evil"\n• **Host** — "Thou preparest a table before me"\n\nNo matter your valley, the Shepherd walks with you. 🙏`,
+
+  "psalm 91": `🛡️ **Psalm 91** — The Psalm of Protection\n\n"He that dwelleth in the secret place of the most High shall abide under the shadow of the Almighty."\n\nThis psalm promises:\n• God is your refuge and fortress (v.2)\n• He covers you with His feathers (v.4)\n• No evil shall befall you (v.10)\n• Angels guard your steps (v.11)\n• When you call, He answers (v.15)\n\nA powerful psalm to pray over yourself and loved ones. 🙏`,
+
+  "psalm 46:10": `🕊️ **Psalm 46:10** — "Be still, and know that I am God."\n\nIn the chaos of life, God invites us to:\n• **Be still** — stop striving, stop worrying\n• **Know** — trust deeply, with certainty\n• **That I am God** — He is sovereign over everything\n\nSometimes the most powerful thing you can do is simply rest in His presence. 💛`,
+
+  "psalm 139": `🌟 **Psalm 139** — God Knows You Completely\n\n"O LORD, thou hast searched me, and known me. Thou knowest my downsitting and mine uprising, thou understandest my thought afar off."\n\nKey truths:\n• God knows everything about you (v.1-6)\n• You cannot escape His presence (v.7-12)\n• You are fearfully and wonderfully made (v.14)\n• He saw you before you were born (v.16)\n\nYou are not an accident — you are God's masterpiece. 💛`,
+
+  "romans 8:28": `✨ **Romans 8:28** — "And we know that all things work together for good to them that love God, to them who are the called according to his purpose."\n\nThis doesn't say all things ARE good — but they WORK TOGETHER for good. Even your hardest season is being woven into something beautiful. 🌟`,
+
+  "romans 8:38": `💛 **Romans 8:38-39** — "For I am persuaded, that neither death, nor life, nor angels, nor principalities, nor powers, nor things present, nor things to come, nor height, nor depth, nor any other creature, shall be able to separate us from the love of God, which is in Christ Jesus our Lord."\n\nNOTHING can separate you from God's love. Nothing. 🙏`,
+
+  "jeremiah 29:11": `🌅 **Jeremiah 29:11** — "For I know the thoughts that I think toward you, saith the LORD, thoughts of peace, and not of evil, to give you an expected end."\n\nGod has plans for you — plans for peace, hope, and a future. Your current chapter is not your final chapter. 🙏`,
+
+  "philippians 4:13": `💪 **Philippians 4:13** — "I can do all things through Christ which strengtheneth me."\n\nPaul wrote this from prison! It's about divine strength in every circumstance — not superhuman ability, but Christ's power flowing through your weakness. 🔥`,
+
+  "proverbs 3:5": `🧭 **Proverbs 3:5-6** — "Trust in the LORD with all thine heart; and lean not unto thine own understanding. In all thy ways acknowledge him, and he shall direct thy paths."\n\nWhen life is confusing, choose trust over worry. God sees the full picture. 🌟`,
+
+  "proverbs 31": `👑 **Proverbs 31:10-31** — The Virtuous Woman\n\n"Who can find a virtuous woman? for her price is far above rubies."\n\nShe is described as:\n• Trustworthy (v.11) • Hardworking (v.13-19)\n• Generous (v.20) • Wise (v.26)\n• Feared of the LORD (v.30)\n\n"Favour is deceitful, and beauty is vain: but a woman that feareth the LORD, she shall be praised." 🌸`,
+
+  "genesis 1": `🌍 **Genesis 1** — The Creation\n\n"In the beginning God created the heaven and the earth."\n\nSeven days:\n• Day 1: Light • Day 2: Sky\n• Day 3: Land & vegetation • Day 4: Sun, moon, stars\n• Day 5: Sea creatures & birds • Day 6: Animals & humanity\n• Day 7: God rested\n\n"And God saw every thing that he had made, and, behold, it was very good." 🙏`,
+
+  "matthew 5": `⛰️ **Matthew 5** — Sermon on the Mount\n\nThe Beatitudes:\n• Blessed are the poor in spirit, the meek, the merciful, the peacemakers...\n\nKey teachings:\n• "Ye are the salt of the earth" (5:13)\n• "Love your enemies" (5:44)\n• "Turn the other cheek" (5:39)\n\nJesus laid out a radically different way of living. 🌟`,
+
+  "matthew 6:34": `🌅 **Matthew 6:34** — "Take therefore no thought for the morrow: for the morrow shall take thought for the things of itself. Sufficient unto the day is the evil thereof."\n\nJesus says: don't borrow tomorrow's worries. Focus on today. God's got tomorrow covered. 💛`,
+
+  "matthew 28:20": `🌟 **Matthew 28:20** — "Lo, I am with you always, even unto the end of the world."\n\nJesus' final promise — He never leaves. In every season, every struggle, every joy — He is there. 🙏`,
+
+  "1 corinthians 13": `💕 **1 Corinthians 13:4-7** — The Love Chapter\n\n"Love suffereth long, and is kind; love envieth not; love vaunteth not itself, is not puffed up, doth not behave itself unseemly, seeketh not her own, is not easily provoked, thinketh no evil; rejoiceth not in iniquity, but rejoiceth in the truth; beareth all things, believeth all things, hopeth all things, endureth all things."\n\nThis is the standard of love — patient, kind, selfless. 🌟`,
+
+  "isaiah 40:31": `🦅 **Isaiah 40:31** — "But they that wait upon the LORD shall renew their strength; they shall mount up with wings as eagles; they shall run, and not be weary; and they shall walk, and not faint."\n\nWaiting on God isn't passive — it's trusting actively. And the reward is supernatural strength. 🔥`,
+
+  "isaiah 41:10": `💪 **Isaiah 41:10** — "Fear thou not; for I am with thee: be not dismayed; for I am thy God: I will strengthen thee; yea, I will help thee; yea, I will uphold thee with the right hand of my righteousness."\n\nThree promises: I will strengthen you. I will help you. I will uphold you. 🙏`,
+
+  "ephesians 2:8": `✝️ **Ephesians 2:8-9** — "For by grace are ye saved through faith; and that not of yourselves: it is the gift of God: Not of works, lest any man should boast."\n\nSalvation is:\n• By GRACE — God's unmerited favor\n• Through FAITH — not works\n• A GIFT — you can't earn it\n\nThis is the beauty of the Gospel. 🕊️`,
+
+  "revelation 21:4": `🌈 **Revelation 21:4** — "And God shall wipe away all tears from their eyes; and there shall be no more death, neither sorrow, nor crying, neither shall there be any more pain: for the former things are passed away."\n\nThe ultimate promise — a day is coming when every tear, every pain, every loss will be erased forever. Hold on to this hope. 💛`,
+
+  "song of solomon 1": `🌹 **Song of Solomon 1-7** — The Song of Love\n\nThis book is a poetic celebration of love between a bridegroom and his bride:\n\n• Ch 1-2: The beloved speaks of her lover with admiration\n• Ch 3: She searches for him and finds him\n• Ch 4: He describes her beauty — "Thou art all fair, my love; there is no spot in thee"\n• Ch 5: The beloved opens the door but he has gone\n• Ch 6: "I am my beloved's, and my beloved is mine"\n• Ch 7: "How fair and how pleasant art thou, O love, for delights!"\n\nThis book celebrates love as God designed it — passionate, faithful, beautiful. Many see it as a picture of Christ's love for His church. 🤍`,
 };
 
-// Topic-based responses
-const TOPIC_RESPONSES: Record<string, string> = {
-  "peace": "🕊️ Finding Peace in God's Word\n\n**\"Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you. Let not your heart be troubled, neither let it be afraid.\"** — John 14:27\n\nHere are some powerful verses about peace:\n\n• **Philippians 4:6-7** — \"Be careful for nothing; but in every thing by prayer and supplication with thanksgiving let your requests be made known unto God. And the peace of God, which passeth all understanding, shall keep your hearts and minds through Christ Jesus.\"\n\n• **Isaiah 26:3** — \"Thou wilt keep him in perfect peace, whose mind is stayed on thee: because he trusteth in thee.\"\n\n• **Psalm 46:10** — \"Be still, and know that I am God.\"\n\nPractical steps:\n1. 🙏 Pray about what's troubling you\n2. 📖 Meditate on God's promises\n3. 🎵 Worship — it shifts your focus\n4. 🤝 Talk to someone you trust\n\nRemember: God's peace isn't the absence of storms — it's His presence *in* the storm. 💛",
-
-  "anxiety": "🤗 What the Bible Says About Anxiety\n\n**\"Cast all your anxiety on him because he cares for you.\"** — 1 Peter 5:7\n\nAnxiety is something many people face, even people of faith. Here's what Scripture teaches:\n\n• **Matthew 6:25-34** — Jesus said \"Take no thought for your life\" — He tells us not to worry about food, clothing, or tomorrow\n• **Philippians 4:6-7** — The antidote to anxiety is prayer with thanksgiving\n• **Psalm 55:22** — \"Cast thy burden upon the LORD, and he shall sustain thee\"\n• **Isaiah 41:10** — \"Fear thou not; for I am with thee: be not dismayed; for I am thy God\"\n\nRemember:\n- It's okay to feel anxious — even David expressed fear in the Psalms\n- Bring it to God honestly in prayer\n- Take it one day at a time (Matthew 6:34)\n- Consider speaking to a counselor — seeking help is wise, not weak\n\nYou are held by a God who never lets go. 💛",
-
-  "forgiveness": "❤️ What the Bible Says About Forgiveness\n\n**\"If we confess our sins, he is faithful and just to forgive us our sins, and to cleanse us from all unrighteousness.\"** — 1 John 1:9\n\n**God's Forgiveness of Us:**\n• Psalm 103:12 — \"As far as the east is from the west, so far hath he removed our transgressions from us\"\n• Romans 8:1 — \"There is therefore now no condemnation to them which are in Christ Jesus\"\n• Micah 7:19 — He will \"cast all their sins into the depths of the sea\"\n\n**Our Forgiveness of Others:**\n• Matthew 6:14-15 — \"If ye forgive men their trespasses, your heavenly Father will also forgive you\"\n• Ephesians 4:32 — \"Be ye kind one to another, tenderhearted, forgiving one another, even as God for Christ's sake hath forgiven you\"\n• Colossians 3:13 — \"Forbearing one another, and forgiving one another\"\n\nForgiveness doesn't mean what happened was okay — it means you're releasing the burden to God. 🙏",
-
-  "love": "💕 What the Bible Says About Love\n\n**\"God is love; and he that dwelleth in love dwelleth in God, and God in him.\"** — 1 John 4:16\n\n**The Greatest Commandment:**\n• Matthew 22:37-39 — Love God with all your heart, soul, and mind. Love your neighbor as yourself.\n\n**The Love Chapter — 1 Corinthians 13:4-7:**\n\"Love suffereth long, and is kind; love envieth not; love vaunteth not itself, is not puffed up, doth not behave itself unseemly, seeketh not her own, is not easily provoked, thinketh no evil; rejoiceth not in iniquity, but rejoiceth in the truth; beareth all things, believeth all things, hopeth all things, endureth all things.\"\n\n**God's Love for You:**\n• Romans 8:38-39 — NOTHING can separate you from God's love\n• Jeremiah 31:3 — \"I have loved thee with an everlasting love\"\n• John 15:13 — \"Greater love hath no man than this, that a man lay down his life for his friends\"\n\nYou are deeply, unconditionally loved. 🌟",
-
-  "strength": "💪 Finding Strength in God\n\n**\"But they that wait upon the LORD shall renew their strength; they shall mount up with wings as eagles; they shall run, and not be weary; and they shall walk, and not faint.\"** — Isaiah 40:31\n\nVerses about God's strength:\n\n• **Philippians 4:13** — \"I can do all things through Christ which strengtheneth me\"\n• **2 Corinthians 12:9** — \"My grace is sufficient for thee: for my strength is made perfect in weakness\"\n• **Psalm 46:1** — \"God is our refuge and strength, a very present help in trouble\"\n• **Nehemiah 8:10** — \"The joy of the LORD is your strength\"\n• **Deuteronomy 31:6** — \"Be strong and of a good courage, fear not... for the LORD thy God... will not fail thee, nor forsake thee\"\n\nYou don't have to be strong enough on your own. Let God be your strength today. 🔥",
-
-  "faith": "⛪ What the Bible Says About Faith\n\n**\"Now faith is the substance of things hoped for, the evidence of things not seen.\"** — Hebrews 11:1\n\n**Building Your Faith:**\n• Romans 10:17 — \"Faith cometh by hearing, and hearing by the word of God\"\n• James 2:17 — \"Faith, if it hath not works, is dead, being alone\"\n• Mark 11:22-24 — Faith as small as a mustard seed can move mountains\n• Hebrews 11 — The Hall of Faith: Abraham, Moses, Noah, Rahab...\n\n**When Faith Feels Weak:**\n• Mark 9:24 — \"Lord, I believe; help thou mine unbelief\" — It's okay to be honest!\n• Psalm 42:11 — \"Why art thou cast down, O my soul? Hope thou in God\"\n• Lamentations 3:22-23 — God's mercies are new every morning\n\nFaith isn't the absence of doubt — it's choosing to trust God despite the doubt. 🙏",
-
-  "prayer": "🙏 What the Bible Says About Prayer\n\n**\"Ask, and it shall be given you; seek, and ye shall find; knock, and it shall be opened unto you.\"** — Matthew 7:7\n\n**How to Pray — The Lord's Prayer (Matthew 6:9-13):**\n1. \"Our Father which art in heaven\" — Approach God as Father\n2. \"Hallowed be thy name\" — Worship first\n3. \"Thy kingdom come, thy will be done\" — Surrender to His will\n4. \"Give us this day our daily bread\" — Ask for daily needs\n5. \"Forgive us our debts\" — Confess sins\n6. \"Lead us not into temptation\" — Seek protection\n\n**Encouragement:**\n• 1 Thessalonians 5:17 — \"Pray without ceasing\"\n• Philippians 4:6 — Pray about everything, worry about nothing\n• Jeremiah 33:3 — \"Call unto me, and I will answer thee\"\n• Romans 8:26 — The Spirit helps us when we don't know what to pray\n\nPrayer isn't about perfect words — it's about an honest heart. God hears you. 💛",
-
-  "salvation": "✝️ The Gospel — How to Be Saved\n\n**\"For by grace are ye saved through faith; and that not of yourselves: it is the gift of God: Not of works, lest any man should boast.\"** — Ephesians 2:8-9\n\n**The Romans Road to Salvation:**\n1. **Romans 3:23** — \"All have sinned, and come short of the glory of God\" — Everyone needs saving\n2. **Romans 6:23** — \"The wages of sin is death; but the gift of God is eternal life through Jesus Christ\" — Sin has consequences, but God offers a gift\n3. **Romans 5:8** — \"God commendeth his love toward us, in that, while we were yet sinners, Christ died for us\" — Jesus died for us\n4. **Romans 10:9** — \"If thou shalt confess with thy mouth the Lord Jesus, and shalt believe in thine heart that God hath raised him from the dead, thou shalt be saved\"\n5. **Romans 10:13** — \"Whosoever shall call upon the name of the Lord shall be saved\"\n\nSalvation is a free gift. You can't earn it — you simply receive it by faith. 🕊️",
-
-  "suffering": "💔 What the Bible Says About Suffering\n\n**\"Weeping may endure for a night, but joy cometh in the morning.\"** — Psalm 30:5\n\nSuffering is one of the hardest aspects of life. Here's what Scripture teaches:\n\n• **Romans 8:28** — God works all things for good for those who love Him\n• **2 Corinthians 4:17** — \"Our light affliction, which is but for a moment, worketh for us a far more exceeding and eternal weight of glory\"\n• **James 1:2-4** — Trials produce patience and maturity\n• **Psalm 34:18** — \"The LORD is nigh unto them that are of a broken heart\"\n• **Revelation 21:4** — One day, God will wipe away every tear\n\n**Jesus understands suffering:**\n• He was betrayed, mocked, beaten, and crucified\n• Hebrews 4:15 — He was \"in all points tempted like as we are\"\n• He weeps with you (John 11:35)\n\nYour pain is not the end of your story. Hold on to hope. 🙏",
+// Topic responses
+const TOPICS: Record<string, string> = {
+  peace: `🕊️ **Finding Peace**\n\n"Peace I leave with you, my peace I give unto you." — John 14:27\n\nKey verses:\n• Philippians 4:6-7 — Pray, and God's peace will guard your heart\n• Isaiah 26:3 — Perfect peace for those who trust\n• Psalm 46:10 — "Be still, and know that I am God"\n\nGod's peace isn't the absence of storms — it's His presence IN the storm. 💛`,
+  anxiety: `🤗 **Overcoming Anxiety**\n\n"Cast all your anxiety on him because he cares for you." — 1 Peter 5:7\n\n• Matthew 6:25-34 — Don't worry about tomorrow\n• Philippians 4:6-7 — Prayer is the antidote\n• Isaiah 41:10 — "Fear not; I am with thee"\n\nIt's okay to feel anxious — bring it honestly to God. You are held. 💛`,
+  forgiveness: `❤️ **Forgiveness**\n\n"If we confess our sins, he is faithful and just to forgive us." — 1 John 1:9\n\n• Psalm 103:12 — He removes sin as far as east from west\n• Ephesians 4:32 — Forgive as God forgave you\n• Matthew 6:14 — Forgiving others frees YOU\n\nForgiveness releases the burden to God. 🙏`,
+  love: `💕 **What the Bible Says About Love**\n\n"God is love." — 1 John 4:16\n\n• 1 Corinthians 13:4-7 — Love is patient, kind, enduring\n• Romans 8:38-39 — Nothing separates us from God's love\n• John 15:13 — Greatest love = laying down your life\n• Jeremiah 31:3 — "I have loved thee with an everlasting love"\n\nYou are deeply, unconditionally loved. 🌟`,
+  strength: `💪 **Finding Strength**\n\n"They that wait upon the LORD shall renew their strength." — Isaiah 40:31\n\n• Philippians 4:13 — "I can do all things through Christ"\n• 2 Corinthians 12:9 — "My strength is made perfect in weakness"\n• Psalm 46:1 — God is a very present help in trouble\n\nLet God be your strength today. 🔥`,
+  faith: `⛪ **Growing in Faith**\n\n"Faith is the substance of things hoped for." — Hebrews 11:1\n\n• Romans 10:17 — Faith comes by hearing God's Word\n• Mark 9:24 — "Lord, I believe; help mine unbelief"\n• Hebrews 11 — The Hall of Faith heroes\n\nFaith isn't the absence of doubt — it's choosing to trust despite doubt. 🙏`,
+  prayer: `🙏 **About Prayer**\n\n"Ask, and it shall be given you." — Matthew 7:7\n\nThe Lord's Prayer pattern (Matthew 6:9-13):\n1. Worship — "Hallowed be thy name"\n2. Surrender — "Thy will be done"\n3. Ask — "Give us our daily bread"\n4. Confess — "Forgive us our debts"\n5. Protection — "Lead us not into temptation"\n\nPrayer isn't about perfect words — it's about an honest heart. 💛`,
+  salvation: `✝️ **The Gospel**\n\n"By grace are ye saved through faith." — Ephesians 2:8\n\nThe Romans Road:\n1. Romans 3:23 — All have sinned\n2. Romans 6:23 — Wages of sin is death, but gift is eternal life\n3. Romans 5:8 — Christ died for us while we were sinners\n4. Romans 10:9 — Confess and believe = saved\n5. Romans 10:13 — Whoever calls on the Lord SHALL be saved\n\nSalvation is a free gift. 🕊️`,
+  suffering: `💔 **In Times of Suffering**\n\n"Weeping may endure for a night, but joy cometh in the morning." — Psalm 30:5\n\n• Romans 8:28 — God works all things for good\n• Psalm 34:18 — The LORD is near the brokenhearted\n• 2 Corinthians 4:17 — Momentary affliction → eternal glory\n• John 11:35 — Jesus wept. He feels your pain.\n\nYour pain is not the end of your story. 🙏`,
 };
 
-function findBestResponse(userMessage: string): string {
+function parseVerseRef(text: string): string | null {
+  const lower = text.toLowerCase().replace(/['']/g, "'").trim();
+  // Normalize: "john 19 23" → "john 19:23", "1 corinthians 13" stays
+  // Handle patterns like "john 3 16", "john 3:16", "psalm 23", "genesis 1"
+  const bookMap: Record<string, string> = {
+    gen: "genesis", ex: "exodus", lev: "leviticus", num: "numbers", deut: "deuteronomy",
+    josh: "joshua", judg: "judges", ruth: "ruth", "1 sam": "1 samuel", "2 sam": "2 samuel",
+    "1 kings": "1 kings", "2 kings": "2 kings", "1 chr": "1 chronicles", "2 chr": "2 chronicles",
+    neh: "nehemiah", esth: "esther", ps: "psalm", psa: "psalm", prov: "proverbs",
+    eccl: "ecclesiastes", song: "song of solomon", isa: "isaiah", jer: "jeremiah",
+    lam: "lamentations", ezek: "ezekiel", dan: "daniel", hos: "hosea", joel: "joel",
+    amos: "amos", obad: "obadiah", jon: "jonah", mic: "micah", nah: "nahum",
+    hab: "habakkuk", zeph: "zephaniah", hag: "haggai", zech: "zechariah", mal: "malachi",
+    matt: "matthew", mat: "matthew", mk: "mark", lk: "luke", jn: "john",
+    acts: "acts", rom: "romans", "1 cor": "1 corinthians", "2 cor": "2 corinthians",
+    gal: "galatians", eph: "ephesians", phil: "philippians", col: "colossians",
+    "1 thess": "1 thessalonians", "2 thess": "2 thessalonians",
+    "1 tim": "1 timothy", "2 tim": "2 timothy", tit: "titus", phlm: "philemon",
+    heb: "hebrews", jas: "james", "1 pet": "1 peter", "2 pet": "2 peter",
+    "1 jn": "1 john", "2 jn": "2 john", "3 jn": "3 john", jude: "jude", rev: "revelation",
+  };
+
+  // Try to match: [book] [chapter] [verse] or [book] [chapter]:[verse]
+  const verseMatch = lower.match(/^(?:what (?:does|is|about) )?(?:the )?(\d?\s?[a-z]+(?:\s+of\s+[a-z]+)?)\s+(\d+)[\s:]+(\d+)/);
+  if (verseMatch) {
+    let book = verseMatch[1].trim();
+    for (const [abbr, full] of Object.entries(bookMap)) {
+      if (book === abbr || book.startsWith(abbr + " ")) { book = full; break; }
+    }
+    return `${book} ${verseMatch[2]}:${verseMatch[3]}`;
+  }
+
+  // Just book + chapter: "psalm 23", "genesis 1"
+  const chapterMatch = lower.match(/^(?:what (?:does|is|about) )?(?:the )?(\d?\s?[a-z]+(?:\s+of\s+[a-z]+)?)\s+(\d+)$/);
+  if (chapterMatch) {
+    let book = chapterMatch[1].trim();
+    for (const [abbr, full] of Object.entries(bookMap)) {
+      if (book === abbr || book.startsWith(abbr + " ")) { book = full; break; }
+    }
+    return `${book} ${chapterMatch[2]}`;
+  }
+
+  return null;
+}
+
+// Extended topics
+const MORE_TOPICS: Record<string, string> = {
+  marriage: `💍 **Marriage & Relationships**\n\n"Whoso findeth a wife findeth a good thing, and obtaineth favour of the LORD." — Proverbs 18:22\n\nGod's design for marriage:\n• **Genesis 2:24** — "A man shall leave his father and mother, and shall cleave unto his wife"\n• **Ephesians 5:25** — "Husbands, love your wives, even as Christ loved the church"\n• **1 Corinthians 13:4-7** — Love is patient, love is kind\n• **Ecclesiastes 4:9** — "Two are better than one"\n• **Proverbs 31:10** — "Who can find a virtuous woman? For her price is far above rubies"\n\nWhether you're single, dating, or married — God has a beautiful plan for your love story. Trust His timing. 🤍`,
+
+  patience: `⏳ **Patience & Waiting on God**\n\n"Wait on the LORD: be of good courage, and he shall strengthen thine heart." — Psalm 27:14\n\n• **Isaiah 40:31** — "They that wait upon the LORD shall renew their strength"\n• **James 1:4** — "Let patience have her perfect work, that ye may be perfect and entire"\n• **Psalm 37:7** — "Rest in the LORD, and wait patiently for him"\n• **Habakkuk 2:3** — "Though it tarry, wait for it; because it will surely come"\n• **Lamentations 3:25** — "The LORD is good unto them that wait for him"\n\nGod's delays are not denials. He's working even when you can't see it. 🌱`,
+
+  purpose: `🎯 **Finding Your Purpose**\n\n"For we are his workmanship, created in Christ Jesus unto good works." — Ephesians 2:10\n\n• **Jeremiah 29:11** — God has plans for your hope and future\n• **Romans 8:28** — Everything works together for good\n• **Proverbs 3:5-6** — Trust Him and He directs your paths\n• **Psalm 139:16** — Your days were written before they began\n• **Esther 4:14** — "For such a time as this"\n\nYou are not an accident. God placed you here, right now, for a reason. Walk boldly into what He's called you to do. 🌟`,
+
+  gratitude: `🙏 **Gratitude & Thanksgiving**\n\n"In every thing give thanks: for this is the will of God." — 1 Thessalonians 5:18\n\n• **Psalm 100:4** — "Enter into his gates with thanksgiving"\n• **Colossians 3:15** — "Be ye thankful"\n• **Psalm 136:1** — "O give thanks unto the LORD; for he is good"\n• **Philippians 4:6** — "With thanksgiving let your requests be made known"\n\nGratitude shifts your focus from what's missing to what's present. Start counting blessings — you'll lose count. 💛`,
+
+  anger: `😤 **Dealing with Anger**\n\n"Be ye angry, and sin not: let not the sun go down upon your wrath." — Ephesians 4:26\n\n• **Proverbs 15:1** — "A soft answer turneth away wrath"\n• **James 1:19-20** — "Be swift to hear, slow to speak, slow to wrath"\n• **Proverbs 14:29** — "He that is slow to wrath is of great understanding"\n• **Psalm 37:8** — "Cease from anger, and forsake wrath"\n\nAnger isn't always sin — even Jesus was angry. But how we handle it matters. Breathe. Pray. Release it to God. 🕊️`,
+
+  temptation: `⚔️ **Overcoming Temptation**\n\n"There hath no temptation taken you but such as is common to man." — 1 Corinthians 10:13\n\n• **James 4:7** — "Resist the devil, and he will flee from you"\n• **Matthew 26:41** — "Watch and pray, that ye enter not into temptation"\n• **Hebrews 2:18** — "He is able to succour them that are tempted"\n• **1 John 4:4** — "Greater is he that is in you, than he that is in the world"\n\nTemptation is not sin — giving in is. Jesus was tempted too (Matthew 4). You're stronger than you think. 💪`,
+
+  wisdom: `🦉 **Seeking Wisdom**\n\n"If any of you lack wisdom, let him ask of God, that giveth to all men liberally." — James 1:5\n\n• **Proverbs 4:7** — "Wisdom is the principal thing; therefore get wisdom"\n• **Proverbs 9:10** — "The fear of the LORD is the beginning of wisdom"\n• **Colossians 3:16** — "Let the word of Christ dwell in you richly"\n• **Psalm 119:105** — "Thy word is a lamp unto my feet"\n\nWisdom isn't just knowledge — it's knowing how to apply truth to life. Read the Word daily and it becomes your compass. 📖`,
+
+  family: `👨‍👩‍👧‍👦 **Family & Parenting**\n\n"As for me and my house, we will serve the LORD." — Joshua 24:15\n\n• **Proverbs 22:6** — "Train up a child in the way he should go"\n• **Ephesians 6:1-4** — Children obey, fathers provoke not\n• **Psalm 127:3** — "Children are an heritage of the LORD"\n• **Colossians 3:13** — "Forbearing one another, and forgiving one another"\n\nFamily is God's first institution. It's not always easy, but it's always worth investing in. 🏡`,
+
+  loneliness: `🫂 **When You Feel Alone**\n\n"I will never leave thee, nor forsake thee." — Hebrews 13:5\n\n• **Psalm 68:6** — "God setteth the solitary in families"\n• **Deuteronomy 31:8** — "He will not fail thee, neither forsake thee"\n• **Matthew 28:20** — "Lo, I am with you always"\n• **Psalm 25:16** — "Turn thee unto me, and have mercy upon me; for I am desolate and afflicted"\n• **Isaiah 41:10** — "Fear thou not; for I am with thee"\n\nLoneliness is not a sign that God has left — sometimes it's an invitation to draw closer. You are never truly alone. 💛`,
+
+  hope: `🌅 **Holding On to Hope**\n\n"Now the God of hope fill you with all joy and peace in believing." — Romans 15:13\n\n• **Jeremiah 29:11** — Plans for hope and a future\n• **Romans 5:5** — "Hope maketh not ashamed"\n• **Psalm 42:11** — "Hope thou in God"\n• **Lamentations 3:22-23** — "His mercies are new every morning"\n• **Hebrews 6:19** — "Hope as an anchor of the soul"\n\nHope is not wishful thinking — it's anchored in God's character. Your story isn't over. The best is yet to come. 🌈`,
+
+  work: `💼 **Work & Money**\n\n"Whatsoever ye do, do it heartily, as to the Lord." — Colossians 3:23\n\n• **Proverbs 10:4** — "The hand of the diligent maketh rich"\n• **Matthew 6:33** — "Seek ye first the kingdom of God"\n• **Philippians 4:19** — "My God shall supply all your need"\n• **Proverbs 3:9** — "Honour the LORD with thy substance"\n• **1 Timothy 6:10** — "The love of money is the root of all evil"\n\nWork is worship when done for God's glory. He is your ultimate provider. 🙏`,
+};
+
+function findResponse(userMessage: string, conversationHistory: string[] = []): string {
   const lower = userMessage.toLowerCase().trim();
 
-  // Check specific verses first
-  for (const [key, response] of Object.entries(BIBLE_RESPONSES)) {
+  // 1. Try parsing as a verse reference
+  const ref = parseVerseRef(lower);
+  if (ref) {
+    if (VERSES[ref]) return VERSES[ref];
+    const chapterOnly = ref.replace(/:\d+$/, "");
+    if (VERSES[chapterOnly]) return VERSES[chapterOnly];
+    for (const [key, val] of Object.entries(VERSES)) {
+      if (key.startsWith(chapterOnly) || ref.startsWith(key)) return val;
+    }
+    // Verse not in our database — give helpful response
+    return `📖 I don't have **${ref}** in my database yet, but here's what I can help with:\n\n• Try popular verses like **John 3:16**, **Psalm 23**, or **Romans 8:28**\n• Ask about topics: love, faith, prayer, forgiveness, anxiety\n• Or tell me what's on your heart and I'll find the right Scripture for you.\n\nThe full Bible is available in the "Read Bible" section of the app! 📖`;
+  }
+
+  // 2. Direct key lookup in verses
+  for (const [key, response] of Object.entries(VERSES)) {
     if (lower.includes(key)) return response;
   }
 
-  // Check topics
-  const topicKeywords: Record<string, string[]> = {
-    peace: ["peace", "calm", "rest", "quiet", "still", "tranquil", "serene"],
-    anxiety: ["anxiety", "anxious", "worried", "worry", "stress", "stressed", "nervous", "fear", "afraid", "scared", "overwhelmed", "panic"],
-    forgiveness: ["forgive", "forgiveness", "forgiving", "sorry", "guilt", "guilty", "ashamed", "shame", "regret"],
-    love: ["love", "loved", "loving", "relationship", "marriage", "valentine", "romance", "caring"],
-    strength: ["strength", "strong", "weak", "weakness", "tired", "exhausted", "burnout", "can't go on", "give up", "hopeless"],
-    faith: ["faith", "believe", "belief", "doubt", "doubting", "trust", "trusting", "uncertain"],
+  // 3. Enhanced topic matching with more categories
+  const topicMap: Record<string, string[]> = {
+    peace: ["peace", "calm", "rest", "tranquil", "serene", "still", "quiet", "silence"],
+    anxiety: ["anxiety", "anxious", "worried", "worry", "stress", "nervous", "fear", "afraid", "overwhelmed", "panic", "scared", "terrified"],
+    forgiveness: ["forgive", "forgiveness", "guilt", "guilty", "ashamed", "shame", "regret", "sorry", "mistake"],
+    love: ["love", "loved", "loving", "caring"],
+    marriage: ["marriage", "marry", "married", "wife", "husband", "spouse", "wedding", "dating", "girlfriend", "boyfriend", "relationship", "romance", "romantic", "soulmate", "partner"],
+    strength: ["strength", "strong", "weak", "tired", "exhausted", "give up", "hopeless", "can't go on", "burnout", "burned out"],
+    faith: ["faith", "believe", "doubt", "trust", "uncertain", "unbelief"],
     prayer: ["prayer", "pray", "praying", "how to pray", "talk to god"],
-    salvation: ["salvation", "saved", "born again", "accept christ", "gospel", "eternal life", "heaven", "hell", "baptism", "repent"],
-    suffering: ["suffering", "pain", "hurt", "hurting", "struggle", "difficult", "hard time", "loss", "grief", "grieving", "depressed", "depression", "sad", "sadness", "lonely", "loneliness", "death", "dying"],
+    salvation: ["salvation", "saved", "born again", "gospel", "eternal life", "heaven", "hell", "repent", "baptism", "accept jesus"],
+    suffering: ["suffering", "pain", "hurt", "struggle", "loss", "grief", "depressed", "depression", "sad", "death", "die", "dying", "funeral"],
+    patience: ["patience", "patient", "waiting", "wait", "how long", "when will", "timing"],
+    purpose: ["purpose", "calling", "destiny", "meaning", "why am i", "what should i", "direction", "confused about life", "lost in life"],
+    gratitude: ["grateful", "gratitude", "thankful", "thanksgiving", "blessed", "blessings", "count"],
+    anger: ["anger", "angry", "furious", "mad", "rage", "frustrated", "frustration", "annoyed", "irritated"],
+    temptation: ["temptation", "tempted", "resist", "lust", "addicted", "addiction", "porn", "craving"],
+    wisdom: ["wisdom", "wise", "decision", "choose", "discernment", "guidance", "confused"],
+    family: ["family", "parent", "parents", "mother", "father", "children", "child", "son", "daughter", "sibling", "brother", "sister"],
+    loneliness: ["lonely", "alone", "isolated", "nobody", "no friends", "no one", "friendless"],
+    hope: ["hope", "hopeless", "give up", "no hope", "it's over", "done", "finished", "end"],
+    work: ["work", "job", "career", "money", "financial", "finances", "business", "salary", "debt", "broke"],
   };
 
-  for (const [topic, keywords] of Object.entries(topicKeywords)) {
-    for (const kw of keywords) {
-      if (lower.includes(kw)) {
-        return TOPIC_RESPONSES[topic];
-      }
+  for (const [topic, keywords] of Object.entries(topicMap)) {
+    if (keywords.some(kw => lower.includes(kw))) {
+      if (TOPICS[topic]) return TOPICS[topic];
+      if (MORE_TOPICS[topic]) return MORE_TOPICS[topic];
     }
   }
 
-  // Check for greetings
-  if (/^(hi|hello|hey|good morning|good evening|greetings)/i.test(lower)) {
-    return "Hello! 🌟 Welcome to the Mini Pastor. I'm here to help you explore the Bible and grow in your faith.\n\nHere are some things you can ask me:\n\n• 📖 **\"What does John 3:16 mean?\"**\n• 🙏 **\"What does the Bible say about anxiety?\"**\n• ✝️ **\"How can I be saved?\"**\n• 💪 **\"I need strength today\"**\n• ❤️ **\"What does the Bible say about forgiveness?\"**\n• 🕊️ **\"Help me find peace\"**\n\nFeel free to ask anything about faith and Scripture! 💛";
+  // 4. Emotional crisis detection
+  if (/kill myself|suicide|want to die|end it all|not worth living|self harm/i.test(lower)) {
+    return `🤍 **Please hear this:** You are deeply loved, valued, and seen — by God and by people around you.\n\n"For I know the thoughts that I think toward you, saith the LORD, thoughts of peace, and not of evil, to give you an expected end." — Jeremiah 29:11\n\n• **Psalm 34:18** — "The LORD is nigh unto them that are of a broken heart"\n• **Isaiah 43:4** — "Thou wast precious in my sight... and I have loved thee"\n\n🆘 **Please reach out for help:**\n• **988 Suicide & Crisis Lifeline** — Call or text **988**\n• **Crisis Text Line** — Text HOME to **741741**\n\nYour life matters. This season will pass. God is not done with your story. 💛`;
   }
 
-  // Check for thank you
-  if (/thank|thanks|thx|appreciate/i.test(lower)) {
-    return "You're very welcome! 🙏 It's a blessing to walk alongside you on this journey.\n\n**\"Give thanks unto the LORD; for he is good: for his mercy endureth for ever.\"** — Psalm 136:1\n\nKeep reading, keep praying, and keep growing. God is with you every step of the way! 💛🕊️";
+  // 5. Greetings
+  if (/^(hi|hello|hey|good morning|good evening|good night|greetings|yo|sup|what's up)/i.test(lower)) {
+    const greetings = [
+      `Hello! 🌟 I'm the Mini Pastor — here to help you explore Scripture and grow in faith.\n\nYou can ask me:\n• 📖 Any verse — "John 3:16", "Psalm 23"\n• 💬 Life topics — love, anxiety, forgiveness, hope, purpose\n• 🙏 Spiritual questions — prayer, faith, salvation\n• 💪 Encouragement when you need it\n\nWhat's on your heart today? 💛`,
+      `Peace be with you! 🕊️ Welcome to Mini Pastor.\n\nI'm here to walk with you through Scripture. Try:\n• A verse like "Romans 8:28" or "Isaiah 41:10"\n• A question like "How should I pray?"\n• Or just tell me what you're going through\n\nI'm listening. 💛`,
+    ];
+    return greetings[Math.floor(Math.random() * greetings.length)];
   }
 
-  // Check if it seems like a Bible question
-  if (/bible|scripture|verse|god|jesus|christ|spirit|lord|pray|church|faith|sin|heaven/i.test(lower)) {
-    return `🙏 That's a wonderful question about faith!\n\nWhile I'm working with a limited knowledge base right now, here are some Scriptures that might speak to you:\n\n• **Proverbs 3:5-6** — \"Trust in the LORD with all thine heart; and lean not unto thine own understanding.\"\n• **Jeremiah 29:11** — \"For I know the thoughts that I think toward you, saith the LORD, thoughts of peace, and not of evil.\"\n• **Romans 8:28** — \"All things work together for good to them that love God.\"\n\nTry asking me about specific topics like:\n- Prayer, Faith, Love, Forgiveness\n- Anxiety, Peace, Strength, Suffering\n- Salvation, or specific verses like \"John 3:16\"\n\nI'd love to dive deeper with you! 📖✨`;
+  // 6. Thank you
+  if (/thank|thanks|appreciate|blessed|amen/i.test(lower)) {
+    return `You're so welcome! 🙏\n\n"Give thanks unto the LORD; for he is good: for his mercy endureth for ever." — Psalm 136:1\n\nRemember:\n• Keep reading the Word daily 📖\n• Pray without ceasing 🙏\n• Share what you've learned with others 💛\n\nGod loves you more than you'll ever know. Keep walking with Him! 🕊️`;
   }
 
-  // Default: guide them toward Bible topics
-  return "🕊️ I'm the Mini Pastor, here to help you explore the Bible and grow in your faith!\n\nI can help you with questions about:\n\n• 📖 **Bible verses** — Ask about John 3:16, Psalm 23, Romans 8:28, etc.\n• 🙏 **Topics** — Prayer, faith, love, forgiveness, salvation, peace, anxiety, strength\n• ✝️ **The Gospel** — How to be saved, what Jesus taught\n• 💪 **Encouragement** — When you need strength or comfort\n\nFor topics outside the Bible, I'll respectfully point you in the right direction, but my focus is on Scripture and spiritual guidance.\n\nWhat's on your heart today? 💛";
+  // 7. "Who are you" / "what can you do"
+  if (/who are you|what are you|what can you do|what do you do|help me|how does this work/i.test(lower)) {
+    return `🌟 **I'm Mini Pastor** — your personal Bible study companion!\n\nHere's what I can help with:\n\n📖 **Bible Verses** — Ask about any verse (e.g., "John 3:16", "Psalm 91")\n💬 **Life Topics** — Love, marriage, anxiety, forgiveness, patience, purpose, anger, temptation, hope, loneliness, work\n🙏 **Spiritual Growth** — Prayer, faith, salvation, wisdom\n💪 **Encouragement** — When life gets tough\n✝️ **The Gospel** — Understanding salvation\n\nJust type your question or what's on your heart! 💛`;
+  }
+
+  // 8. General Bible/spiritual question
+  if (/bible|scripture|verse|god|jesus|christ|lord|church|sin|heaven|spirit|holy|worship|commandment/i.test(lower)) {
+    return `🙏 That's a wonderful thing to think about!\n\nHere are some foundational Scriptures:\n\n• **John 3:16** — God's love for the world\n• **Proverbs 3:5-6** — Trust in the LORD\n• **Romans 8:28** — All things work for good\n• **Psalm 23** — The Lord is my shepherd\n• **Philippians 4:13** — Strength through Christ\n\nWant me to go deeper on any of these? Or ask about a specific topic like love, faith, or prayer! 📖✨`;
+  }
+
+  // 9. Conversational follow-ups
+  if (/tell me more|explain|go deeper|more about|continue|what else|another|more verses/i.test(lower)) {
+    return `📖 Here are more powerful Scriptures to meditate on:\n\n• **Psalm 46:10** — "Be still, and know that I am God"\n• **2 Timothy 1:7** — "God hath not given us the spirit of fear"\n• **Hebrews 11:1** — "Faith is the substance of things hoped for"\n• **Matthew 11:28** — "Come unto me, all ye that labour and are heavy laden, and I will give you rest"\n• **Psalm 37:4** — "Delight thyself also in the LORD; and he shall give thee the desires of thine heart"\n\nWould you like to explore a specific topic? 💛`;
+  }
+
+  // 10. Default — more helpful
+  return `🕊️ I'd love to help you with that!\n\nHere's what I'm best at:\n\n📖 **Verses** — Type any reference like "John 3:16" or "Psalm 23"\n💬 **Topics** — Ask about love, faith, prayer, anxiety, forgiveness, hope, marriage, patience, purpose, or anger\n🙏 **Questions** — "How should I pray?", "What is salvation?", "I need strength"\n💪 **Comfort** — Tell me what you're going through\n\nTry one of these, or just speak from your heart — I'm here for you. 💛`;
 }
 
 export async function POST(req: NextRequest) {
   const { messages } = await req.json();
 
-  // Get the last user message
-  const lastUserMsg = [...messages].reverse().find((m: any) => m.role === "user");
+  // Get conversation context
+  const userMessages = messages.filter((m: any) => m.role === "user");
+  const lastUserMsg = userMessages[userMessages.length - 1];
   let userText = "";
-  
   if (lastUserMsg) {
-    if (lastUserMsg.parts) {
-      userText = lastUserMsg.parts
-        .filter((p: any) => p.type === "text")
-        .map((p: any) => p.text)
-        .join(" ");
-    } else if (lastUserMsg.content) {
-      userText = lastUserMsg.content;
-    }
+    userText = lastUserMsg.parts
+      ? lastUserMsg.parts.filter((p: any) => p.type === "text").map((p: any) => p.text).join(" ")
+      : lastUserMsg.content || "";
   }
 
-  const response = findBestResponse(userText);
+  // Pass conversation history for context
+  const history = userMessages.slice(0, -1).map((m: any) => m.content || "");
+  const response = findResponse(userText, history);
 
-  // Stream the response word by word for a natural typing effect
   const encoder = new TextEncoder();
   const stream = new ReadableStream({
     async start(controller) {
       const words = response.split(" ");
       for (let i = 0; i < words.length; i++) {
-        const word = words[i];
-        const text = i === 0 ? word : " " + word;
-        // Use the Vercel AI SDK data stream protocol format
+        const text = i === 0 ? words[i] : " " + words[i];
         const escaped = text.replace(/\\/g, "\\\\").replace(/"/g, '\\"').replace(/\n/g, "\\n");
         controller.enqueue(encoder.encode(`0:"${escaped}"\n`));
-        // Variable speed: faster for short words, slower for longer
-        const delay = Math.min(30 + word.length * 5, 80);
-        await new Promise(r => setTimeout(r, delay));
+        await new Promise(r => setTimeout(r, Math.min(20 + words[i].length * 3, 60)));
       }
-      // Send finish event
       controller.enqueue(encoder.encode(`e:{"finishReason":"stop","usage":{"promptTokens":0,"completionTokens":0}}\n`));
       controller.enqueue(encoder.encode(`d:{"finishReason":"stop","usage":{"promptTokens":0,"completionTokens":0}}\n`));
       controller.close();
@@ -135,9 +271,6 @@ export async function POST(req: NextRequest) {
   });
 
   return new Response(stream, {
-    headers: {
-      "Content-Type": "text/plain; charset=utf-8",
-      "X-Vercel-AI-Data-Stream": "v1",
-    },
+    headers: { "Content-Type": "text/plain; charset=utf-8", "X-Vercel-AI-Data-Stream": "v1" },
   });
 }
