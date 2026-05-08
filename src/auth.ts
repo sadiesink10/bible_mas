@@ -2,10 +2,11 @@ import NextAuth from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 import { db } from "./lib/db"
 import bcrypt from "bcryptjs"
-import { authConfig } from "./auth.config"
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
-  ...authConfig,
+  pages: {
+    signIn: '/login',
+  },
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -43,7 +44,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       }
     })
   ],
+  secret: process.env.AUTH_SECRET?.trim(),
   session: { strategy: "jwt" },
+  trustHost: true,
   callbacks: {
     async session({ session, token }) {
       if (token.sub && session.user) {
