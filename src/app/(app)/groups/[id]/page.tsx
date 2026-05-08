@@ -51,15 +51,15 @@ export default async function GroupDetailPage({ params }: { params: Promise<{ id
       {/* Group Header */}
       <div className="mb-8">
         <div className="flex items-start gap-4 mb-4">
-          <div className="w-14 h-14 bg-gradient-to-br from-pink-200 to-blue-200 dark:from-pink-800 dark:to-blue-800 rounded-2xl flex items-center justify-center shrink-0">
-            <Users className="w-7 h-7 text-pink-600 dark:text-pink-300" />
+          <div className="w-14 h-14 bg-gradient-to-br from-[#d4e4cf] to-[#dde8ef] dark:from-[#3a4d36] dark:to-[#263040] rounded-2xl flex items-center justify-center shrink-0">
+            <Users className="w-7 h-7 text-[#5e7d54] dark:text-[#8fb585]" />
           </div>
           <div className="flex-1">
-            <h1 className="text-3xl font-bold text-slate-800 dark:text-white">{group.name}</h1>
+            <h1 className="text-3xl font-bold text-[#3d3d3d] dark:text-white">{group.name}</h1>
             {group.description && (
-              <p className="text-slate-500 dark:text-slate-400">{group.description}</p>
+              <p className="text-[#7a7a7a] dark:text-[#9e9b93]">{group.description}</p>
             )}
-            <p className="text-sm text-slate-400 dark:text-slate-500 mt-1">
+            <p className="text-sm text-[#9a9a9a] dark:text-[#6b6860] mt-1">
               Created by {group.createdBy.name} • {group.members.length}/{group.maxMembers} members
             </p>
           </div>
@@ -67,11 +67,11 @@ export default async function GroupDetailPage({ params }: { params: Promise<{ id
       </div>
 
       {/* Join Code Banner */}
-      <div className="bg-gradient-to-r from-pink-50 to-blue-50 dark:from-slate-800 dark:to-slate-800 border border-pink-200 dark:border-slate-700 rounded-2xl p-5 mb-8">
+      <div className="bg-gradient-to-r from-[#eef3ed] to-[#e8f0f5] dark:from-[#252830] dark:to-[#252830] border border-[#d4e4cf] dark:border-[#363940] rounded-2xl p-5 mb-8">
         <div className="flex items-center justify-between flex-wrap gap-4">
           <div>
-            <p className="text-sm font-medium text-slate-500 dark:text-slate-400 mb-1">Share this code so friends can join:</p>
-            <div className="text-3xl font-mono font-black tracking-[0.3em] text-pink-600 dark:text-pink-400">
+            <p className="text-sm font-medium text-[#7a7a7a] dark:text-[#9e9b93] mb-1">Share this code so friends can join:</p>
+            <div className="text-3xl font-mono font-black tracking-[0.3em] text-[#5e7d54] dark:text-[#8fb585]">
               {group.joinCode}
             </div>
           </div>
@@ -81,20 +81,20 @@ export default async function GroupDetailPage({ params }: { params: Promise<{ id
 
       {/* Collective Stats */}
       <div className="grid grid-cols-3 gap-4 mb-8">
-        <div className="bg-white dark:bg-slate-800 border border-rose-100 dark:border-slate-700 p-4 rounded-2xl text-center">
-          <Flame className="w-6 h-6 text-rose-400 mx-auto mb-1" />
-          <div className="text-2xl font-black text-slate-800 dark:text-white">{totalStreak}</div>
-          <div className="text-xs font-medium text-slate-400 uppercase tracking-wider">Combined Streak</div>
+        <div className="bg-white dark:bg-[#252830] border border-[#e5dfd5] dark:border-[#363940] p-4 rounded-2xl text-center">
+          <Flame className="w-6 h-6 text-[#c4956a] mx-auto mb-1" />
+          <div className="text-2xl font-black text-[#3d3d3d] dark:text-white">{totalStreak}</div>
+          <div className="text-xs font-medium text-[#9a9a9a] uppercase tracking-wider">Combined Streak</div>
         </div>
-        <div className="bg-white dark:bg-slate-800 border border-blue-100 dark:border-slate-700 p-4 rounded-2xl text-center">
-          <Award className="w-6 h-6 text-blue-400 mx-auto mb-1" />
-          <div className="text-2xl font-black text-slate-800 dark:text-white">{totalPoints}</div>
-          <div className="text-xs font-medium text-slate-400 uppercase tracking-wider">Total Points</div>
+        <div className="bg-white dark:bg-[#252830] border border-[#e5dfd5] dark:border-[#363940] p-4 rounded-2xl text-center">
+          <Award className="w-6 h-6 text-[#6a9ab8] mx-auto mb-1" />
+          <div className="text-2xl font-black text-[#3d3d3d] dark:text-white">{totalPoints}</div>
+          <div className="text-xs font-medium text-[#9a9a9a] uppercase tracking-wider">Total Points</div>
         </div>
-        <div className="bg-white dark:bg-slate-800 border border-pink-100 dark:border-slate-700 p-4 rounded-2xl text-center">
-          <Trophy className="w-6 h-6 text-amber-400 mx-auto mb-1" />
-          <div className="text-2xl font-black text-slate-800 dark:text-white">{bestStreak}</div>
-          <div className="text-xs font-medium text-slate-400 uppercase tracking-wider">Best Streak</div>
+        <div className="bg-white dark:bg-[#252830] border border-[#e5dfd5] dark:border-[#363940] p-4 rounded-2xl text-center">
+          <Trophy className="w-6 h-6 text-[#c4956a] mx-auto mb-1" />
+          <div className="text-2xl font-black text-[#3d3d3d] dark:text-white">{bestStreak}</div>
+          <div className="text-xs font-medium text-[#9a9a9a] uppercase tracking-wider">Best Streak</div>
         </div>
       </div>
 
@@ -111,8 +111,8 @@ export default async function GroupDetailPage({ params }: { params: Promise<{ id
       )}
 
       {/* Members List — sorted by Jesus Points (leaderboard) */}
-      <h2 className="text-xl font-bold text-slate-800 dark:text-white mb-4 flex items-center gap-2">
-        <Users className="w-5 h-5 text-pink-400" />
+      <h2 className="text-xl font-bold text-[#3d3d3d] dark:text-white mb-4 flex items-center gap-2">
+        <Users className="w-5 h-5 text-[#7c9a72]" />
         Members Leaderboard
       </h2>
 
@@ -122,13 +122,13 @@ export default async function GroupDetailPage({ params }: { params: Promise<{ id
           .map((member, rank) => (
           <div
             key={member.id}
-            className={`bg-white dark:bg-slate-800 border rounded-2xl p-5 flex items-center gap-4 ${
-              rank === 0 ? "border-amber-200 dark:border-amber-800/50 ring-2 ring-amber-100 dark:ring-amber-900/30" : "border-pink-100 dark:border-slate-700"
+            className={`bg-white dark:bg-[#252830] border rounded-2xl p-5 flex items-center gap-4 ${
+              rank === 0 ? "border-[#c4956a]/40 dark:border-[#c4956a]/30 ring-2 ring-[#f0ece3] dark:ring-[#3a3028]/40" : "border-[#e5dfd5] dark:border-[#363940]"
             }`}
           >
             {/* Rank */}
             <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${
-              rank === 0 ? "bg-amber-100 text-amber-600" : rank === 1 ? "bg-slate-100 text-slate-500" : "bg-pink-50 text-pink-400"
+              rank === 0 ? "bg-[#f0ece3] text-[#c4956a]" : rank === 1 ? "bg-[#f0f0f0] text-[#7a7a7a]" : "bg-[#eef3ed] text-[#7c9a72]"
             }`}>
               {rank + 1}
             </div>
@@ -136,26 +136,26 @@ export default async function GroupDetailPage({ params }: { params: Promise<{ id
             {/* Avatar */}
             <div
               className="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-sm"
-              style={{ backgroundColor: member.user.profileColor || "#f9a8d4" }}
+              style={{ backgroundColor: member.user.profileColor || "#a8c5a0" }}
             >
               {member.user.name[0].toUpperCase()}
             </div>
 
             <div className="flex-1">
               <div className="flex items-center gap-2">
-                <span className="font-semibold text-slate-800 dark:text-white">{member.user.name}</span>
-                {member.role === "admin" && <Crown className="w-4 h-4 text-amber-400" />}
-                {rank === 0 && <span className="text-xs bg-amber-100 text-amber-600 px-2 py-0.5 rounded-full font-semibold">Top Reader</span>}
+                <span className="font-semibold text-[#3d3d3d] dark:text-white">{member.user.name}</span>
+                {member.role === "admin" && <Crown className="w-4 h-4 text-[#c4956a]" />}
+                {rank === 0 && <span className="text-xs bg-[#f0ece3] text-[#c4956a] px-2 py-0.5 rounded-full font-semibold">Top Reader</span>}
               </div>
-              <p className="text-sm text-slate-500 dark:text-slate-400">{member.user.email}</p>
+              <p className="text-sm text-[#7a7a7a] dark:text-[#9e9b93]">{member.user.email}</p>
             </div>
 
             <div className="flex items-center gap-4 text-sm">
-              <div className="flex items-center gap-1 text-rose-400" title="Current Streak">
+              <div className="flex items-center gap-1 text-[#c4956a]" title="Current Streak">
                 <Flame className="w-4 h-4" />
                 <span className="font-semibold">{member.user.currentStreak}</span>
               </div>
-              <div className="flex items-center gap-1 text-blue-400" title="Jesus Points">
+              <div className="flex items-center gap-1 text-[#6a9ab8]" title="Jesus Points">
                 <Award className="w-4 h-4" />
                 <span className="font-semibold">{member.user.jesusPoints}</span>
               </div>

@@ -10,10 +10,10 @@ type Message = {
 };
 
 const SUGGESTED_QUESTIONS = [
-  { icon: BookOpen, text: "What does John 3:16 mean?", color: "text-pink-400" },
-  { icon: Heart, text: "What does the Bible say about love?", color: "text-rose-400" },
-  { icon: Shield, text: "How can I find peace?", color: "text-blue-400" },
-  { icon: Zap, text: "I need strength today", color: "text-amber-400" },
+  { icon: BookOpen, text: "What does John 3:16 mean?", color: "text-[#7c9a72]" },
+  { icon: Heart, text: "What does the Bible say about love?", color: "text-[#c4956a]" },
+  { icon: Shield, text: "How can I find peace?", color: "text-[#6a9ab8]" },
+  { icon: Zap, text: "I need strength today", color: "text-[#9b8dc0]" },
 ];
 
 export default function PastorPage() {
@@ -96,14 +96,14 @@ export default function PastorPage() {
   }
 
   return (
-    <div className="flex flex-col h-[calc(100vh-4rem)] md:h-screen w-full relative bg-gradient-to-b from-pink-50 via-white to-blue-50 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900">
-      <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl border-b border-pink-100 dark:border-slate-700 p-6 flex flex-col md:flex-row md:items-center justify-between z-10 shrink-0">
+    <div className="flex flex-col h-[calc(100vh-4rem)] md:h-screen w-full relative bg-gradient-to-b from-[#f5f0e8] via-[#f8f7f4] to-[#eef3ed] dark:from-[#1a1d21] dark:via-[#1e2126] dark:to-[#1a1d21]">
+      <div className="bg-white/80 dark:bg-[#252830]/80 backdrop-blur-xl border-b border-[#e5dfd5] dark:border-[#363940] p-6 flex flex-col md:flex-row md:items-center justify-between z-10 shrink-0">
         <div>
-          <h1 className="text-2xl font-bold flex items-center gap-2 text-slate-800 dark:text-white">
-            <Sparkles className="w-6 h-6 text-pink-400" />
+          <h1 className="text-2xl font-bold flex items-center gap-2 text-[#3d3d3d] dark:text-white">
+            <Sparkles className="w-6 h-6 text-[#9b8dc0]" />
             Mini Pastor Assistant
           </h1>
-          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
+          <p className="text-sm text-[#7a7a7a] dark:text-[#9e9b93] mt-1">
             Ask about Bible verses, faith topics, and spiritual guidance.
           </p>
         </div>
@@ -112,11 +112,11 @@ export default function PastorPage() {
       <div className="flex-1 overflow-y-auto p-4 md:p-8 space-y-6">
         {messages.length === 0 && (
           <div className="flex flex-col items-center justify-center h-full text-center max-w-lg mx-auto">
-            <div className="w-20 h-20 bg-gradient-to-br from-pink-100 to-rose-100 dark:from-pink-900/30 dark:to-rose-900/30 text-pink-500 rounded-full flex items-center justify-center mb-6">
+            <div className="w-20 h-20 bg-gradient-to-br from-[#efe9f5] to-[#e6dff0] dark:from-[#302840]/40 dark:to-[#281e38]/40 text-[#9b8dc0] rounded-full flex items-center justify-center mb-6">
               <Sparkles className="w-10 h-10" />
             </div>
-            <h3 className="text-2xl font-bold mb-2 text-slate-700 dark:text-white">How can I help you today?</h3>
-            <p className="text-sm text-slate-500 dark:text-slate-400 mb-8">
+            <h3 className="text-2xl font-bold mb-2 text-[#4a4a4a] dark:text-white">How can I help you today?</h3>
+            <p className="text-sm text-[#7a7a7a] dark:text-[#9e9b93] mb-8">
               Ask about any Bible verse, topic, or spiritual question.
             </p>
             
@@ -127,7 +127,7 @@ export default function PastorPage() {
                   <button
                     key={i}
                     onClick={() => sendMessage(q.text)}
-                    className="flex items-center gap-3 p-4 bg-white dark:bg-slate-800 border border-pink-100 dark:border-slate-700 rounded-2xl text-left hover:shadow-md hover:shadow-pink-100/30 transition-all text-sm text-slate-700 dark:text-slate-200"
+                    className="flex items-center gap-3 p-4 bg-white dark:bg-[#252830] border border-[#e5dfd5] dark:border-[#363940] rounded-2xl text-left hover:shadow-md hover:shadow-[#a8c5a0]/10 transition-all text-sm text-[#4a4a4a] dark:text-[#c8c4bc]"
                   >
                     <Icon className={`w-5 h-5 ${q.color} shrink-0`} />
                     {q.text}
@@ -141,20 +141,20 @@ export default function PastorPage() {
         {messages.map(m => (
           <div key={m.id} className={`flex gap-4 max-w-3xl ${m.role === 'user' ? 'ml-auto flex-row-reverse' : ''}`}>
             <div className={`w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 shadow-sm ${
-              m.role === 'user' ? 'bg-gradient-to-br from-pink-400 to-rose-500 text-white' : 'bg-white dark:bg-slate-800 border border-pink-100 dark:border-slate-700 text-pink-400'
+              m.role === 'user' ? 'bg-gradient-to-br from-[#7c9a72] to-[#5e7d54] text-white' : 'bg-white dark:bg-[#252830] border border-[#e5dfd5] dark:border-[#363940] text-[#9b8dc0]'
             }`}>
               {m.role === 'user' ? <UserIcon className="w-5 h-5" /> : <Sparkles className="w-5 h-5" />}
             </div>
             <div className={`p-4 rounded-3xl text-sm md:text-base whitespace-pre-wrap leading-relaxed shadow-sm ${
               m.role === 'user' 
-                ? 'bg-gradient-to-r from-pink-400 to-rose-500 text-white rounded-tr-sm' 
-                : 'bg-white dark:bg-slate-800 border border-pink-100 dark:border-slate-700 rounded-tl-sm text-slate-700 dark:text-slate-200'
+                ? 'bg-gradient-to-r from-[#7c9a72] to-[#5e7d54] text-white rounded-tr-sm' 
+                : 'bg-white dark:bg-[#252830] border border-[#e5dfd5] dark:border-[#363940] rounded-tl-sm text-[#4a4a4a] dark:text-[#c8c4bc]'
             }`}>
               {m.content || (
                 <div className="flex gap-1 items-center h-5">
-                  <div className="w-2 h-2 rounded-full bg-pink-400 animate-bounce" />
-                  <div className="w-2 h-2 rounded-full bg-pink-400 animate-bounce" style={{ animationDelay: "0.2s"}} />
-                  <div className="w-2 h-2 rounded-full bg-pink-400 animate-bounce" style={{ animationDelay: "0.4s"}} />
+                  <div className="w-2 h-2 rounded-full bg-[#a8c5a0] animate-bounce" />
+                  <div className="w-2 h-2 rounded-full bg-[#a8c5a0] animate-bounce" style={{ animationDelay: "0.2s"}} />
+                  <div className="w-2 h-2 rounded-full bg-[#a8c5a0] animate-bounce" style={{ animationDelay: "0.4s"}} />
                 </div>
               )}
             </div>
@@ -163,18 +163,18 @@ export default function PastorPage() {
         <div ref={messagesEndRef} />
       </div>
 
-      <div className="p-4 bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl border-t border-pink-100 dark:border-slate-700 shrink-0">
+      <div className="p-4 bg-white/80 dark:bg-[#252830]/80 backdrop-blur-xl border-t border-[#e5dfd5] dark:border-[#363940] shrink-0">
         <form onSubmit={handleSubmit} className="max-w-3xl mx-auto relative group">
           <input
             value={input}
             onChange={e => setInput(e.target.value)}
             placeholder="Ask the pastor anything about faith..."
-            className="w-full pl-6 pr-16 py-4 bg-pink-50/50 dark:bg-slate-700 border border-pink-100 dark:border-slate-600 rounded-full focus:ring-2 focus:ring-pink-400 focus:border-pink-400 transition-all outline-none shadow-sm text-slate-700 dark:text-white"
+            className="w-full pl-6 pr-16 py-4 bg-[#f5f0e8]/50 dark:bg-[#1e2126] border border-[#e5dfd5] dark:border-[#363940] rounded-full focus:ring-2 focus:ring-[#7c9a72] focus:border-[#7c9a72] transition-all outline-none shadow-sm text-[#4a4a4a] dark:text-white"
           />
           <button 
             type="submit" 
             disabled={!input.trim() || isLoading}
-            className="absolute right-2 top-2 bottom-2 w-12 bg-gradient-to-r from-pink-400 to-rose-500 text-white rounded-full flex items-center justify-center hover:from-pink-500 hover:to-rose-600 disabled:opacity-50 transition-colors shadow-md shadow-pink-300/20"
+            className="absolute right-2 top-2 bottom-2 w-12 bg-gradient-to-r from-[#7c9a72] to-[#5e7d54] text-white rounded-full flex items-center justify-center hover:from-[#6d8b63] hover:to-[#4f6e45] disabled:opacity-50 transition-colors shadow-md shadow-[#7c9a72]/15"
           >
             <Send className="w-5 h-5 ml-1" />
           </button>

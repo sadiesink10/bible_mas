@@ -46,10 +46,10 @@ export default function LogReadingPage() {
   return (
     <div className="p-6 md:p-10 max-w-2xl mx-auto w-full">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-rose-500">
+        <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[#7c9a72] to-[#5e7d54]">
           Log Offline Reading
         </h1>
-        <p className="text-slate-500 dark:text-slate-400 mt-2">
+        <p className="text-[#7a7a7a] dark:text-[#9e9b93] mt-2">
           Read from your physical Bible? Log your progress here to keep your streak alive and earn points.
         </p>
       </div>
@@ -57,7 +57,7 @@ export default function LogReadingPage() {
       <motion.div 
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-white dark:bg-slate-800 border border-pink-100 dark:border-slate-700 rounded-3xl p-6 md:p-8 shadow-sm"
+        className="bg-white dark:bg-[#252830] border border-[#e5dfd5] dark:border-[#363940] rounded-3xl p-6 md:p-8 shadow-sm"
       >
         {message && (
           <motion.div 
@@ -77,12 +77,12 @@ export default function LogReadingPage() {
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-sm font-semibold text-slate-600 dark:text-slate-300 mb-2">Book</label>
+              <label className="block text-sm font-semibold text-[#6b6b6b] dark:text-[#b0ada5] mb-2">Book</label>
               <select 
                 name="book" 
                 required
                 defaultValue=""
-                className="w-full pl-4 pr-10 py-3 bg-pink-50/50 dark:bg-slate-700/50 border border-pink-100 dark:border-slate-600 rounded-2xl focus:ring-2 focus:ring-pink-400 focus:border-pink-400 transition-all outline-none appearance-none text-slate-700 dark:text-white"
+                className="w-full pl-4 pr-10 py-3 bg-[#eef3ed]/50 dark:bg-[#1e2126]/50 border border-[#e5dfd5] dark:border-[#363940] rounded-2xl focus:ring-2 focus:ring-[#7c9a72] focus:border-[#7c9a72] transition-all outline-none appearance-none text-[#4a4a4a] dark:text-white"
               >
                 <option value="" disabled>Select a book</option>
                 <optgroup label="📜 Old Testament">
@@ -95,33 +95,33 @@ export default function LogReadingPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-slate-600 dark:text-slate-300 mb-2">Chapter</label>
+              <label className="block text-sm font-semibold text-[#6b6b6b] dark:text-[#b0ada5] mb-2">Chapter</label>
               <input 
                 type="number" 
                 name="chapter" 
                 min="1" 
                 required
-                className="w-full px-4 py-3 bg-blue-50/50 dark:bg-slate-700/50 border border-blue-100 dark:border-slate-600 rounded-2xl focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all outline-none text-slate-700 dark:text-white"
+                className="w-full px-4 py-3 bg-[#e8f0f5]/50 dark:bg-[#1e2126]/50 border border-[#e5dfd5] dark:border-[#363940] rounded-2xl focus:ring-2 focus:ring-[#6a9ab8] focus:border-[#6a9ab8] transition-all outline-none text-[#4a4a4a] dark:text-white"
                 placeholder="e.g. 3"
               />
             </div>
           </div>
 
-          <div className="pt-4 border-t border-pink-50 dark:border-slate-700">
-            <label className="block text-sm font-medium text-slate-400 dark:text-slate-500 mb-4">Verses (Optional)</label>
+          <div className="pt-4 border-t border-[#f0ece3] dark:border-[#363940]">
+            <label className="block text-sm font-medium text-[#9a9a9a] dark:text-[#6b6860] mb-4">Verses (Optional)</label>
             <div className="grid grid-cols-2 gap-4">
               <input 
                 type="number" 
                 name="startVerse" 
                 min="1"
-                className="w-full px-4 py-3 bg-pink-50/30 dark:bg-slate-700/50 border border-pink-100 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-pink-400 focus:border-pink-400 transition-all outline-none text-slate-700 dark:text-white"
+                className="w-full px-4 py-3 bg-[#f5f0e8]/30 dark:bg-[#1e2126]/50 border border-[#e5dfd5] dark:border-[#363940] rounded-xl focus:ring-2 focus:ring-[#7c9a72] focus:border-[#7c9a72] transition-all outline-none text-[#4a4a4a] dark:text-white"
                 placeholder="Start"
               />
               <input 
                 type="number" 
                 name="endVerse" 
                 min="1"
-                className="w-full px-4 py-3 bg-pink-50/30 dark:bg-slate-700/50 border border-pink-100 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-pink-400 focus:border-pink-400 transition-all outline-none text-slate-700 dark:text-white"
+                className="w-full px-4 py-3 bg-[#f5f0e8]/30 dark:bg-[#1e2126]/50 border border-[#e5dfd5] dark:border-[#363940] rounded-xl focus:ring-2 focus:ring-[#7c9a72] focus:border-[#7c9a72] transition-all outline-none text-[#4a4a4a] dark:text-white"
                 placeholder="End"
               />
             </div>
@@ -130,7 +130,7 @@ export default function LogReadingPage() {
           <button 
             type="submit" 
             disabled={loading}
-            className="w-full flex items-center justify-center py-4 px-4 rounded-2xl text-white bg-gradient-to-r from-pink-400 to-rose-500 hover:from-pink-500 hover:to-rose-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-400 transition-all shadow-lg shadow-pink-300/30 disabled:opacity-70 mt-8 font-semibold text-lg"
+            className="w-full flex items-center justify-center py-4 px-4 rounded-2xl text-white bg-gradient-to-r from-[#7c9a72] to-[#5e7d54] hover:from-[#6d8b63] hover:to-[#4f6e45] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#7c9a72] transition-all shadow-lg shadow-[#7c9a72]/20 disabled:opacity-70 mt-8 font-semibold text-lg"
           >
             {loading ? <Loader2 className="w-6 h-6 animate-spin" /> : (
               <>

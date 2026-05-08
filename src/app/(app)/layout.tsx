@@ -23,14 +23,14 @@ export default async function AppLayout({
   ];
 
   return (
-    <div className="flex h-screen bg-gradient-to-b from-pink-50 via-white to-blue-50 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 overflow-hidden">
+    <div className="flex h-screen bg-gradient-to-b from-[#f5f0e8] via-[#f8f7f4] to-[#eef3ed] dark:from-[#1a1d21] dark:via-[#1e2126] dark:to-[#1a1d21] overflow-hidden">
       {/* Sidebar Navigation */}
-      <aside className="w-64 bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl border-r border-pink-100 dark:border-slate-700 flex-col hidden md:flex">
-        <div className="h-16 flex items-center px-6 border-b border-pink-100 dark:border-slate-700">
-          <div className="bg-gradient-to-br from-pink-400 to-rose-500 p-1.5 rounded-lg text-white shadow-md shadow-pink-300/20 mr-3">
+      <aside className="w-64 bg-white/80 dark:bg-[#252830]/80 backdrop-blur-xl border-r border-[#e5dfd5] dark:border-[#363940] flex-col hidden md:flex">
+        <div className="h-16 flex items-center px-6 border-b border-[#e5dfd5] dark:border-[#363940]">
+          <div className="bg-gradient-to-br from-[#7c9a72] to-[#5e7d54] p-1.5 rounded-lg text-white shadow-md shadow-[#7c9a72]/15 mr-3">
             <BookOpen className="w-5 h-5" />
           </div>
-          <span className="font-bold text-lg tracking-tight text-slate-800 dark:text-white">ScriptureWalk</span>
+          <span className="font-bold text-lg tracking-tight text-[#3d3d3d] dark:text-white">ScriptureWalk</span>
         </div>
         
         <nav className="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
@@ -40,22 +40,22 @@ export default async function AppLayout({
               <Link
                 key={item.name}
                 href={item.href}
-                className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-pink-50 dark:hover:bg-slate-700 transition-colors font-medium"
+                className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-[#6b6b6b] dark:text-[#b0ada5] hover:bg-[#eef3ed] dark:hover:bg-[#2d3038] transition-colors font-medium"
               >
-                <Icon className="w-5 h-5 text-pink-400" />
+                <Icon className="w-5 h-5 text-[#7c9a72]" />
                 {item.name}
               </Link>
             );
           })}
         </nav>
 
-        <div className="p-4 border-t border-pink-100 dark:border-slate-700">
+        <div className="p-4 border-t border-[#e5dfd5] dark:border-[#363940]">
           <div className="flex items-center gap-3 px-3 py-2 rounded-xl mb-2">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-pink-300 to-rose-400 flex items-center justify-center text-white font-bold text-sm shadow-sm">
+            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#a8c5a0] to-[#7c9a72] flex items-center justify-center text-white font-bold text-sm shadow-sm">
               {session.user.name?.[0]?.toUpperCase()}
             </div>
             <div className="flex flex-col overflow-hidden">
-              <span className="truncate text-sm font-semibold text-slate-700 dark:text-white">{session.user.name}</span>
+              <span className="truncate text-sm font-semibold text-[#4a4a4a] dark:text-white">{session.user.name}</span>
             </div>
           </div>
           <form
@@ -64,7 +64,7 @@ export default async function AppLayout({
               await signOut();
             }}
           >
-            <button className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors text-sm font-medium">
+            <button className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-[#9a9a9a] hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors text-sm font-medium">
               <LogOut className="w-4 h-4" />
               Sign Out
             </button>
@@ -75,10 +75,10 @@ export default async function AppLayout({
       {/* Main Content */}
       <main className="flex-1 flex flex-col h-screen overflow-hidden">
         {/* Mobile Header */}
-        <header className="md:hidden h-16 border-b border-pink-100 dark:border-slate-700 bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl flex items-center justify-between px-4">
+        <header className="md:hidden h-16 border-b border-[#e5dfd5] dark:border-[#363940] bg-white/80 dark:bg-[#252830]/80 backdrop-blur-xl flex items-center justify-between px-4">
           <div className="flex items-center gap-2">
-           <BookOpen className="w-6 h-6 text-pink-400" />
-           <span className="font-bold text-slate-800 dark:text-white">ScriptureWalk</span>
+           <BookOpen className="w-6 h-6 text-[#7c9a72]" />
+           <span className="font-bold text-[#3d3d3d] dark:text-white">ScriptureWalk</span>
           </div>
         </header>
 
@@ -88,14 +88,14 @@ export default async function AppLayout({
       </main>
 
       {/* Mobile Bottom Nav */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 h-16 border-t border-pink-100 dark:border-slate-700 bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl flex items-center justify-around px-2 z-50">
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 h-16 border-t border-[#e5dfd5] dark:border-[#363940] bg-white/90 dark:bg-[#252830]/90 backdrop-blur-xl flex items-center justify-around px-2 z-50">
         {navItems.map((item) => {
           const Icon = item.icon;
           return (
             <Link
               key={item.name}
               href={item.href}
-              className="flex flex-col items-center justify-center w-full h-full text-slate-400 hover:text-pink-500 space-y-1"
+              className="flex flex-col items-center justify-center w-full h-full text-[#9a9a9a] hover:text-[#7c9a72] space-y-1"
             >
               <Icon className="w-5 h-5" />
               <span className="text-[10px] font-medium">{item.name}</span>

@@ -27,9 +27,9 @@ export function InviteMemberForm({ groupId }: { groupId: string }) {
   }
 
   return (
-    <div className="bg-white dark:bg-slate-800 border border-pink-100 dark:border-slate-700 rounded-2xl p-5">
-      <h3 className="font-semibold text-slate-700 dark:text-white mb-3 flex items-center gap-2">
-        <UserPlus className="w-5 h-5 text-pink-400" />
+    <div className="bg-white dark:bg-[#252830] border border-[#e5dfd5] dark:border-[#363940] rounded-2xl p-5">
+      <h3 className="font-semibold text-[#4a4a4a] dark:text-white mb-3 flex items-center gap-2">
+        <UserPlus className="w-5 h-5 text-[#7c9a72]" />
         Invite a Friend
       </h3>
       {message && (
@@ -49,12 +49,12 @@ export function InviteMemberForm({ groupId }: { groupId: string }) {
           type="email"
           required
           placeholder="friend@example.com"
-          className="flex-1 px-4 py-3 bg-pink-50/50 dark:bg-slate-700/50 border border-pink-100 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-pink-400 focus:border-pink-400 outline-none text-slate-700 dark:text-white"
+          className="flex-1 px-4 py-3 bg-[#eef3ed]/50 dark:bg-[#1e2126]/50 border border-[#e5dfd5] dark:border-[#363940] rounded-xl focus:ring-2 focus:ring-[#7c9a72] focus:border-[#7c9a72] outline-none text-[#4a4a4a] dark:text-white"
         />
         <button
           type="submit"
           disabled={loading}
-          className="px-6 py-3 bg-gradient-to-r from-pink-400 to-rose-500 text-white rounded-xl font-semibold hover:from-pink-500 hover:to-rose-600 shadow-md shadow-pink-300/20 disabled:opacity-70 transition-all"
+          className="px-6 py-3 bg-gradient-to-r from-[#7c9a72] to-[#5e7d54] text-white rounded-xl font-semibold hover:from-[#6d8b63] hover:to-[#4f6e45] shadow-md shadow-[#7c9a72]/15 disabled:opacity-70 transition-all"
         >
           {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : "Add"}
         </button>

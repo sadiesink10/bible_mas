@@ -27,12 +27,12 @@ export function JoinGroupForm() {
   }
 
   return (
-    <div className="bg-white dark:bg-slate-800 border border-blue-100 dark:border-slate-700 rounded-3xl p-6 shadow-sm flex flex-col">
-      <h3 className="text-lg font-bold text-slate-800 dark:text-white mb-2 flex items-center gap-2">
-        <LogIn className="w-5 h-5 text-blue-400" />
+    <div className="bg-white dark:bg-[#252830] border border-[#e5dfd5] dark:border-[#363940] rounded-3xl p-6 shadow-sm flex flex-col">
+      <h3 className="text-lg font-bold text-[#3d3d3d] dark:text-white mb-2 flex items-center gap-2">
+        <LogIn className="w-5 h-5 text-[#6a9ab8]" />
         Join a Group
       </h3>
-      <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">
+      <p className="text-sm text-[#7a7a7a] dark:text-[#9e9b93] mb-4">
         Got a code from a friend? Enter it below to join their study group.
       </p>
 
@@ -53,13 +53,13 @@ export function JoinGroupForm() {
           name="code"
           required
           maxLength={6}
-          className="flex-1 px-4 py-3 bg-blue-50/50 dark:bg-slate-700/50 border border-blue-100 dark:border-slate-600 rounded-2xl focus:ring-2 focus:ring-blue-400 outline-none text-slate-700 dark:text-white font-mono text-center text-lg tracking-[0.2em] uppercase"
+          className="flex-1 px-4 py-3 bg-[#e8f0f5]/50 dark:bg-[#1e2126]/50 border border-[#e5dfd5] dark:border-[#363940] rounded-2xl focus:ring-2 focus:ring-[#6a9ab8] outline-none text-[#4a4a4a] dark:text-white font-mono text-center text-lg tracking-[0.2em] uppercase"
           placeholder="ABC123"
         />
         <button
           type="submit"
           disabled={loading}
-          className="px-6 py-3 bg-gradient-to-r from-blue-400 to-sky-500 text-white rounded-2xl font-semibold hover:from-blue-500 hover:to-sky-600 shadow-md shadow-blue-300/20 disabled:opacity-70 transition-all"
+          className="px-6 py-3 bg-gradient-to-r from-[#6a9ab8] to-[#5889a5] text-white rounded-2xl font-semibold hover:from-[#5b8ba9] hover:to-[#497a96] shadow-md shadow-[#6a9ab8]/15 disabled:opacity-70 transition-all"
         >
           {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : "Join"}
         </button>

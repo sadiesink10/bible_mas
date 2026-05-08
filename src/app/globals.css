@@ -1,34 +1,51 @@
 @import "tailwindcss";
 
 :root {
-  --background: #fdf2f8;
-  --foreground: #1e293b;
+  --background: #f8f7f4;
+  --foreground: #3d3d3d;
   --card: #ffffff;
-  --accent-pink: #f9a8d4;
-  --accent-blue: #93c5fd;
-  --accent-rose: #fda4af;
-  --primary: #ec4899;
-  --primary-light: #fbcfe8;
+  --accent-sage: #a8c5a0;
+  --accent-lavender: #b8a9d4;
+  --accent-cream: #e8dcc8;
+  --accent-sky: #a3c4d9;
+  --primary: #7c9a72;
+  --primary-light: #d4e4cf;
+  --primary-dark: #5e7d54;
+  --warm-bg: #f5f0e8;
+  --border-soft: #e5dfd5;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
-  --color-accent-pink: var(--accent-pink);
-  --color-accent-blue: var(--accent-blue);
-  --color-accent-rose: var(--accent-rose);
+  --color-accent-sage: var(--accent-sage);
+  --color-accent-lavender: var(--accent-lavender);
+  --color-accent-cream: var(--accent-cream);
+  --color-accent-sky: var(--accent-sky);
   --color-primary: var(--primary);
   --color-primary-light: var(--primary-light);
+  --color-primary-dark: var(--primary-dark);
+  --color-warm-bg: var(--warm-bg);
+  --color-border-soft: var(--border-soft);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0f172a;
-    --foreground: #e2e8f0;
-    --card: #1e293b;
+    --background: #1a1d21;
+    --foreground: #e0ddd5;
+    --card: #252830;
+    --border-soft: #363940;
+    --warm-bg: #1e2126;
+    --primary: #8fb585;
+    --primary-light: #3a4d36;
+    --primary-dark: #a8c5a0;
+    --accent-sage: #8fb585;
+    --accent-lavender: #9b8dc0;
+    --accent-cream: #c4b9a3;
+    --accent-sky: #7ea8c2;
   }
 }
 
@@ -46,6 +63,6 @@ body {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #f9a8d4;
+  background: var(--accent-sage);
   border-radius: 3px;
 }
