@@ -27,10 +27,10 @@ export function CreatorNote() {
     return (
       <button
         onClick={() => setShowLock(true)}
-        className="fixed bottom-6 right-6 md:bottom-8 md:right-8 w-10 h-10 rounded-full bg-white/60 dark:bg-[#252830]/60 backdrop-blur-md border border-[#e5dfd5]/50 dark:border-[#363940]/50 flex items-center justify-center text-[#c8c4bc] dark:text-[#4a4640] hover:text-[#c4956a] hover:border-[#c4956a]/30 transition-all hover:scale-110 z-50 opacity-40 hover:opacity-100"
-        title="♡"
+        className="inline-flex items-center gap-1.5 text-sm text-[#c8c4bc] dark:text-[#6b6860] hover:text-[#c4956a] transition-all hover:scale-110 mx-auto"
       >
-        <Heart className="w-4 h-4" />
+        <span>Made with</span>
+        <Heart className="w-4 h-4 fill-current text-red-400 hover:text-red-500 animate-pulse" />
       </button>
     );
   }
